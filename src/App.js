@@ -8,14 +8,17 @@ import { faCloudRain } from '@fortawesome/free-solid-svg-icons';
 import { faSun } from '@fortawesome/free-solid-svg-icons';
 import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
 import { faSmog } from '@fortawesome/free-solid-svg-icons';
+import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const [tempUnit, setTempUnit] = useState('celsius');
+  const [tempUnitButton, setTempUnitButton] = useState('switch to fahrenheit');
   const [temp, setTemp] = useState(null);
   const [fetched, setFetched] = useState(false);
   const [location, setLocation] = useState(null);
   const [description, setDescription] = useState(null);
   const [weatherIcon, setWeatherIcon] = useState(null);
+  const [weatherType, setWeatherType] = useState(null);
   const [displayMode, setDisplayMode] = useState('dark');
   
   useEffect(() => {
@@ -29,6 +32,7 @@ function App() {
     const tempDiv = document.getElementById('temp-loading');
     const tempSpan = document.getElementById('temp-span');
     const tempUnit = document.getElementById('temp-unit');
+    const tempUnitButton = document.getElementById('temp-unit-button');
     const locationDiv = document.getElementById('location');
     const gridContainer = document.getElementById('grid-container');
     const api = 'https://weather-proxy.freecodecamp.rocks/api/current?';
@@ -63,6 +67,22 @@ function App() {
       // latAndLong.push(32.3);
       // latAndLong.push(-90.2);
 
+      // CHEYENNE, WYOMING
+      // latAndLong.push(41.1);
+      // latAndLong.push(-104.8);
+
+      // FORT COLLINS, CO
+      // latAndLong.push(40.6);
+      // latAndLong.push(-105.1);
+
+      // ALLIANCE, NEBRASKA
+      // latAndLong.push(42.1);
+      // latAndLong.push(-102.9);
+
+      // CO SPRINGS
+      // latAndLong.push(38.8);
+      // latAndLong.push(-104.8);
+
       const locationQuery = `lon=${latAndLong[1]}&lat=${latAndLong[0]}`;
       const response = await fetch(api + locationQuery);
 
@@ -74,22 +94,28 @@ function App() {
       if (data.weather[0].main === 'Rain') {
         $('#icon').css('color', '#0193F4');
         setWeatherIcon(faCloudRain);
+        setWeatherType('Rain');
       }
       else if (data.weather[0].main === 'Clouds') {
         $('#icon').css('color', '#B5B5B5');
         setWeatherIcon(faCloud);
+        setWeatherType('Clouds');
       }
       else if (data.weather[0].main === 'Clear') {
         $('#icon').css('color', '#EABF00');
         setWeatherIcon(faSun);
+        setWeatherType('Clear');
       }
       else if (data.weather[0].main === 'Snow') {
-        $('#icon').css('color', '#8BE7F0');
+        // $('#icon').css('color', '#8BE7F0');
+        $('#icon').css('color', '#92C5DD');
         setWeatherIcon(faSnowflake);
+        setWeatherType('Snow');
       }
       else if (data.weather[0].main === 'Mist') {
         $('#icon').css('color', 'gray');
         setWeatherIcon(faSmog);
+        setWeatherType('Mist');
       }
       
       tempDiv.style.display = 'none';
@@ -135,16 +161,18 @@ function App() {
       convertedTemp = Math.round((temp * (9/5)) + 32);
       setTemp(convertedTemp);
       setTempUnit('fahrenheit');
+      setTempUnitButton('switch to celsius');
     }
     else {
       convertedTemp = Math.round((temp - 32) * (5/9));
       setTempUnit('celsius');
       setTemp(convertedTemp);
+      setTempUnitButton('switch to fahrenheit');
     }
   }
 
   function changeDisplayMode() {
-    const displayModeButton = document.getElementById('display-mode');
+    const displayModeText = document.getElementById('display-mode-text');
 
     if (displayMode === 'dark') {
       $('#root').css('filter', 'invert(1)');
@@ -155,10 +183,14 @@ function App() {
         $('#temp-span').css('filter', 'none');
       else if ((tempUnit === 'celsius' && temp >= 24) || (tempUnit === 'fahrenheit' && temp >= 75))
         $('#temp-span').css('color', '#D11500');
+
+      if (weatherType === 'Snow')
+        $('icon').css('color', '#388EB2');
         
       $('#icon').css('filter', 'invert(1)');
+      // $('#display-mode-icon').css('filter', 'none');
       $('.shadow').css('box-shadow', '1px 1px 5px white');
-      displayModeButton.innerText = 'switch to dark mode';
+      displayModeText.innerText = 'switch to dark mode';
       setDisplayMode('light');
     }
     else {
@@ -170,9 +202,14 @@ function App() {
         $('#temp-span').css('filter', 'none');
       else if ((tempUnit === 'celsius' && temp >= 24) || (tempUnit === 'fahrenheit' && temp >= 75))
         $('#temp-span').css('color', '#FF6054');
+
+      if (weatherType === 'Snow')
+        $('#icon').css('color', '#388EB2');
       
+      // $('#display-mode-icon').css('filter', 'invert(1)');
+      $('#icon').css('filter', 'none');
       $('.shadow').css('box-shadow', '1px 1px 5px black');
-      displayModeButton.innerText = 'switch to light mode';
+      displayModeText.innerText = 'switch to light mode';
       setDisplayMode('dark');
     }
   }
@@ -185,8 +222,8 @@ function App() {
         <div id="grid-container">
           <div id="first-col">
             <div id="temp-div">
-              <span id="temp-span" name="temperature" hidden>{temp}°</span>
-              <button id="temp-unit" className="shadow" name="change-temperature-unit" onClick={convertTempUnit} hidden>{tempUnit === 'celsius' ? 'C' : 'F'}</button>
+              <span id="temp-span" className="line-height" name="temperature" hidden>{temp}°</span>
+              <span id="temp-unit" className="line-height" hidden>{tempUnit === 'celsius' ? 'C' : 'F'}</span>
             </div>
           </div>
           <div id="second-col">
@@ -197,9 +234,17 @@ function App() {
           </div>
         </div>
       </div>
-      <button id="display-mode" className="shadow" name="switch-display-mode" onClick={changeDisplayMode}>switch to light mode</button>
+      <div id="button-container">
+        <button id="temp-unit-button" className="button shadow" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnitButton}</button>
+        {/* <span id="spacing-span"></span> */}
+        <span id="display-mode-span">
+          <button id="display-mode" className="button shadow" name="switch-display-mode" onClick={changeDisplayMode}>
+            <FontAwesomeIcon id="display-mode-icon" icon={faLightbulb} />
+          </button>
+          <span id="display-mode-text" hidden>switch to light mode</span>
+        </span>
+      </div>
     </div>
-    
   );
 }
 
