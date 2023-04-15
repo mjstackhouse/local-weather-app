@@ -26,119 +26,118 @@ function App() {
       fetchData();
       setFetched(true);
     }
+
+    async function fetchData() {
+      const tempDiv = document.getElementById('weather-loading');
+      const tempSpan = document.getElementById('temp-span');
+      const tempUnit = document.getElementById('temp-unit');
+      const locationDiv = document.getElementById('location');
+      const weatherInfoContainer = document.getElementById('weather-info-container');
+      const api = 'https://weather-proxy.freecodecamp.rocks/api/current?';
+  
+      let latAndLong = [];
+      let data;
+  
+      loadingText();
+    
+      const navigatorObj = window.navigator;
+      const geolocationObj = navigatorObj.geolocation;
+  
+      geolocationObj.getCurrentPosition(async (position) => {
+        console.log('Location successfully retreived');
+  
+        const coordinates = position.coords;
+  
+        latAndLong.push(Number(coordinates.latitude));
+        latAndLong.push(Number(coordinates.longitude));
+  
+        // MANUALLY SETTING LAT/LONG FOR TESTING
+        
+        // SAN ANTONIO
+        // latAndLong.push(29.4);
+        // latAndLong.push(-98.5);
+  
+        // GREAT FALLS, MONTANA
+        // latAndLong.push(47.5);
+        // latAndLong.push(-111.3);
+  
+        // JACKSON, MISSISSIPPI
+        // latAndLong.push(32.3);
+        // latAndLong.push(-90.2);
+  
+        // CHEYENNE, WYOMING
+        // latAndLong.push(41.1);
+        // latAndLong.push(-104.8);
+  
+        // FORT COLLINS, CO
+        // latAndLong.push(40.6);
+        // latAndLong.push(-105.1);
+  
+        // ALLIANCE, NEBRASKA
+        // latAndLong.push(42.1);
+        // latAndLong.push(-102.9);
+  
+        // CO SPRINGS
+        // latAndLong.push(38.8);
+        // latAndLong.push(-104.8);
+  
+        const locationQuery = `lon=${latAndLong[1]}&lat=${latAndLong[0]}`;
+        const response = await fetch(api + locationQuery);
+  
+        data = await response.json();
+  
+        $('.App').css('grid-template-rows', '75px 1fr');
+  
+        // Clouds, Clear, Rain, Snow, Mist
+        if (data.weather[0].main === 'Rain') {
+          $('#icon').css('color', '#0193F4');
+          setWeatherIcon(faCloudRain);
+          setWeatherType('Rain');
+        }
+        else if (data.weather[0].main === 'Clouds') {
+          $('#icon').css('color', '#B5B5B5');
+          setWeatherIcon(faCloud);
+          setWeatherType('Clouds');
+        }
+        else if (data.weather[0].main === 'Clear') {
+          $('#icon').css('color', '#EABF00');
+          setWeatherIcon(faSun);
+          setWeatherType('Clear');
+        }
+        else if (data.weather[0].main === 'Snow') {
+          $('#icon').css('color', '#92C5DD');
+          setWeatherIcon(faSnowflake);
+          setWeatherType('Snow');
+        }
+        else if (data.weather[0].main === 'Mist') {
+          $('#icon').css('color', 'gray');
+          setWeatherIcon(faSmog);
+          setWeatherType('Mist');
+        }
+        
+        tempDiv.style.display = 'none';
+        weatherInfoContainer.style.display = 'grid';
+        tempSpan.style.display = 'inline';
+        tempUnit.style.display = 'inline';
+        locationDiv.style.display = 'block';
+  
+        if (Math.round(data.main.temp) < 15.5)
+          $('#temp-span').css('color', '#3E74FA');
+        else if (Math.round(data.main.temp) >= 24)
+          $('#temp-span').css('color', '#FF6054');
+  
+        setTemp(Math.round(data.main.temp));
+        setLocation(data.name + ', ' + data.sys.country);
+        setDescription(data.weather[0].description);
+      }, () => {
+        console.error('Location could not be retrieved');
+      });
+    }
   }, [tempUnit, temp, fetched, weatherIcon, setWeatherIcon]);
 
-  async function fetchData() {
-    const tempDiv = document.getElementById('temp-loading');
-    const tempSpan = document.getElementById('temp-span');
-    const tempUnit = document.getElementById('temp-unit');
-    const tempUnitButton = document.getElementById('temp-unit-button');
-    const locationDiv = document.getElementById('location');
-    const gridContainer = document.getElementById('grid-container');
-    const api = 'https://weather-proxy.freecodecamp.rocks/api/current?';
-
-    let latAndLong = [];
-    let data;
-
-    loadingText();
-  
-    const navigatorObj = window.navigator;
-    const geolocationObj = navigatorObj.geolocation;
-
-    geolocationObj.getCurrentPosition(async (position) => {
-      console.log('Location successfully retreived');
-
-      const coordinates = position.coords;
-
-      latAndLong.push(Number(coordinates.latitude));
-      latAndLong.push(Number(coordinates.longitude));
-
-      // MANUALLY SETTING LAT/LONG FOR TESTING
-      
-      // SAN ANTONIO
-      // latAndLong.push(29.4);
-      // latAndLong.push(-98.5);
-
-      // GREAT FALLS, MONTANA
-      // latAndLong.push(47.5);
-      // latAndLong.push(-111.3);
-
-      // JACKSON, MISSISSIPPI
-      // latAndLong.push(32.3);
-      // latAndLong.push(-90.2);
-
-      // CHEYENNE, WYOMING
-      // latAndLong.push(41.1);
-      // latAndLong.push(-104.8);
-
-      // FORT COLLINS, CO
-      // latAndLong.push(40.6);
-      // latAndLong.push(-105.1);
-
-      // ALLIANCE, NEBRASKA
-      // latAndLong.push(42.1);
-      // latAndLong.push(-102.9);
-
-      // CO SPRINGS
-      // latAndLong.push(38.8);
-      // latAndLong.push(-104.8);
-
-      const locationQuery = `lon=${latAndLong[1]}&lat=${latAndLong[0]}`;
-      const response = await fetch(api + locationQuery);
-
-      data = await response.json();
-
-      $('.App').css('grid-template-rows', '75px 1fr');
-
-      // Clouds, Clear, Rain, Snow, Mist
-      if (data.weather[0].main === 'Rain') {
-        $('#icon').css('color', '#0193F4');
-        setWeatherIcon(faCloudRain);
-        setWeatherType('Rain');
-      }
-      else if (data.weather[0].main === 'Clouds') {
-        $('#icon').css('color', '#B5B5B5');
-        setWeatherIcon(faCloud);
-        setWeatherType('Clouds');
-      }
-      else if (data.weather[0].main === 'Clear') {
-        $('#icon').css('color', '#EABF00');
-        setWeatherIcon(faSun);
-        setWeatherType('Clear');
-      }
-      else if (data.weather[0].main === 'Snow') {
-        // $('#icon').css('color', '#8BE7F0');
-        $('#icon').css('color', '#92C5DD');
-        setWeatherIcon(faSnowflake);
-        setWeatherType('Snow');
-      }
-      else if (data.weather[0].main === 'Mist') {
-        $('#icon').css('color', 'gray');
-        setWeatherIcon(faSmog);
-        setWeatherType('Mist');
-      }
-      
-      tempDiv.style.display = 'none';
-      gridContainer.style.display = 'grid';
-      tempSpan.style.display = 'inline';
-      tempUnit.style.display = 'inline';
-      locationDiv.style.display = 'block';
-
-      if (Math.round(data.main.temp) < 15.5)
-        $('#temp-span').css('color', '#3E74FA');
-      else if (Math.round(data.main.temp) >= 24)
-        $('#temp-span').css('color', '#FF6054');
-
-      setTemp(Math.round(data.main.temp));
-      setLocation(data.name + ', ' + data.sys.country);
-      setDescription(data.weather[0].description);
-    }, () => {
-      console.error('Location could not be retrieved');
-    });
-  }
 
   function loadingText() {
-    const tempLoadingDiv = document.getElementById('temp-loading');
+    const tempLoadingDiv = document.getElementById('weather-loading');
 
     setTimeout(() => {
       tempLoadingDiv.innerText = 'Loading your local weather';
@@ -217,11 +216,11 @@ function App() {
   return (
     <div>
       <div className="App shadow">
-        <div id="temp-loading"></div>
+        <div id="weather-loading"></div>
         <div id="location">{location}</div>
-        <div id="grid-container">
-          <div id="first-col">
-            <div id="temp-div">
+        <div id="weather-info-container">
+          <div id="first-col" className="flex-nowrap">
+            <div id="temp-div" className="flex-nowrap">
               <span id="temp-span" className="line-height" name="temperature" hidden>{temp}°</span>
               <span id="temp-unit" className="line-height" hidden>{tempUnit === 'celsius' ? 'C' : 'F'}</span>
             </div>
@@ -236,9 +235,8 @@ function App() {
       </div>
       <div id="button-container">
         <button id="temp-unit-button" className="button shadow" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnitButton}</button>
-        {/* <span id="spacing-span"></span> */}
         <span id="display-mode-span">
-          <button id="display-mode" className="button shadow" name="switch-display-mode" onClick={changeDisplayMode}>
+          <button id="display-mode" aria-label="switch-display-mode" className="button shadow" name="switch-display-mode" onClick={changeDisplayMode}>
             <FontAwesomeIcon id="display-mode-icon" icon={faLightbulb} />
           </button>
           <span id="display-mode-text" hidden>switch to light mode</span>
