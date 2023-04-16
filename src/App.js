@@ -28,9 +28,7 @@ function App() {
     }
 
     async function fetchData() {
-      const tempDiv = document.getElementById('weather-loading');
-      const tempSpan = document.getElementById('temp-span');
-      const tempUnit = document.getElementById('temp-unit');
+      const weatherLoadingDiv = document.getElementById('weather-loading');
       const locationDiv = document.getElementById('location');
       const weatherInfoContainer = document.getElementById('weather-info-container');
       const api = 'https://weather-proxy.freecodecamp.rocks/api/current?';
@@ -86,8 +84,6 @@ function App() {
   
         data = await response.json();
   
-        $('.App').css('grid-template-rows', '75px 1fr');
-  
         // Clouds, Clear, Rain, Snow, Mist
         if (data.weather[0].main === 'Rain') {
           $('#icon').css('color', '#0193F4');
@@ -115,10 +111,8 @@ function App() {
           setWeatherType('Mist');
         }
         
-        tempDiv.style.display = 'none';
+        weatherLoadingDiv.style.display = 'none';
         weatherInfoContainer.style.display = 'grid';
-        tempSpan.style.display = 'inline';
-        tempUnit.style.display = 'inline';
         locationDiv.style.display = 'block';
   
         if (Math.round(data.main.temp) < 15.5)
@@ -187,7 +181,6 @@ function App() {
         $('icon').css('color', '#388EB2');
         
       $('#icon').css('filter', 'invert(1)');
-      // $('#display-mode-icon').css('filter', 'none');
       $('.shadow').css('box-shadow', '1px 1px 5px white');
       displayModeText.innerText = 'switch to dark mode';
       setDisplayMode('light');
@@ -205,7 +198,6 @@ function App() {
       if (weatherType === 'Snow')
         $('#icon').css('color', '#388EB2');
       
-      // $('#display-mode-icon').css('filter', 'invert(1)');
       $('#icon').css('filter', 'none');
       $('.shadow').css('box-shadow', '1px 1px 5px black');
       displayModeText.innerText = 'switch to light mode';
@@ -215,14 +207,14 @@ function App() {
 
   return (
     <div>
-      <div className="App shadow">
-        <div id="weather-loading"></div>
-        <div id="location">{location}</div>
-        <div id="weather-info-container">
+      <div className="App shadow width height">
+        <div id="weather-loading" className="width height"></div>
+        <div id="location" className="width" hidden>{location}</div>
+        <div id="weather-info-container" hidden>
           <div id="first-col" className="flex-nowrap">
             <div id="temp-div" className="flex-nowrap">
-              <span id="temp-span" className="line-height" name="temperature" hidden>{temp}°</span>
-              <span id="temp-unit" className="line-height" hidden>{tempUnit === 'celsius' ? 'C' : 'F'}</span>
+              <span id="temp-span" className="line-height" name="temperature">{temp}°</span>
+              <span id="temp-unit" className="line-height">{tempUnit === 'celsius' ? 'C' : 'F'}</span>
             </div>
           </div>
           <div id="second-col">
@@ -233,7 +225,7 @@ function App() {
           </div>
         </div>
       </div>
-      <div id="button-container">
+      <div id="button-container" className="width">
         <button id="temp-unit-button" className="button shadow" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnitButton}</button>
         <span id="display-mode-span">
           <button id="display-mode" aria-label="switch-display-mode" className="button shadow" name="switch-display-mode" onClick={changeDisplayMode}>

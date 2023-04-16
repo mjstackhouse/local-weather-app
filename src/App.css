@@ -1,3 +1,7 @@
+html {
+  font-size: 16px;
+}
+
 #root {
   display: flex;
   text-align: center;
@@ -5,6 +9,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  min-width: 100vw;
   background-color: #4D4D4D;
   /* background-image: radial-gradient(circle at center, white 0%, rgb(231, 231, 231) 2.5%, #636E75 75%, #545D63 100%); */
 }
@@ -12,23 +17,13 @@
 .App {
   display: grid;
   grid-template-columns: 0;
+  grid-template-rows: auto;
   align-items: center;
   color: white;
-  width: 650px;
-  height: 275px;
-  padding: 1.25rem 2.5rem;
+  padding: 1.25em 2.5em;
   border-radius: 1em;
   background-color: #1F1F1F;
 }
-
-/* body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-} */
 
 .button {
   font-size: 1rem;
@@ -46,7 +41,6 @@
 
 #button-container {
   display: grid;
-  width: 650px;
   padding: 1.25em 2.5em;
   grid-template-columns: 1fr 1fr;
 }
@@ -74,14 +68,23 @@
   box-shadow: 1px 1px 5px black;
 }
 
-#weather-loading {
+.width {
   width: 650px;
+}
+
+.height {
+  height: 275px;
+}
+
+#weather-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 2rem;
 }
 
 #location {
   display: none;
-  width: 650px;
   font-size: 3.5rem !important;
 }
 
@@ -136,6 +139,56 @@
   margin: 0;
 }
 
-@media (max-width: 700px) or (max-height: 325px) {
+/* 730, 315 */
+@media (max-width: 750px) or (max-height: 500px) {
+  html {
+    font-size: 12px;
+  }
+  .width {
+    width: 487.5px;
+  }
+  .height {
+    height: 206.25px;
+  }
+  #first-col, #second-col {
+    height: 150px;
+  }
+  #temp-unit-button {
+    width: 150px;
+  }
+  #display-mode-icon {
+    height: 37.5px;
+  }
+  #icon {
+    color: transparent;
+    height: 101.25px;
+    margin: 0.5em 0;
+  }
+}
 
+@media (max-width: 575px) or (max-height: 315px) {
+  html {
+    font-size: 8px;
+  }
+  .width {
+    width: 300px;
+  }
+  .height {
+    height: 137.5px;
+  }
+  #first-col, #second-col {
+    height: 100px;
+  }
+  #temp-unit-button {
+    font-size: 1.5rem;
+    width: 150px;
+  }
+  #display-mode-icon {
+    height: 25px;
+  }
+  #icon {
+    color: transparent;
+    height: 67.5px;
+    margin: 0.5em 0;
+  }
 }
