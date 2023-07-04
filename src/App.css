@@ -19,7 +19,7 @@ html {
   letter-spacing: 1px !important;
   /* background-image: url('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1.jpg'); */
   background-size: cover;
-  transition: all 2s ease-in;
+  transition: background-image 2s ease-in;
 }
 
 h1 {
@@ -137,6 +137,22 @@ h1 {
   display: inline;
   font-family: sans-serif;
   font-size: 1.75rem;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+#invalid-location-feedback {
+  height: 1rem;
+  margin: auto;
+  font-size: 1rem;
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 4rem;
+  right: 0;
 }
 
 .button {
@@ -263,7 +279,7 @@ h1 {
 }
 
 #location {
-  font-size: 1.5rem !important;
+  font-size: 1.5rem;
   font-weight: bold;
   letter-spacing: 6px;
   /* color: white; */
@@ -403,7 +419,7 @@ h1 {
 }
 
 #temp-div {
-  flex-basis: 100%;
+  /* flex-basis: 100%; */
   display: flex;
   flex-wrap: wrap;
 }
@@ -414,7 +430,7 @@ h1 {
 }
 
 #temp-unit, #temp-span {
-  font-size: 4rem !important;
+  font-size: 4rem;
   /* color: white; */
   background-color: transparent;
 }
@@ -614,7 +630,7 @@ h1 {
   }
   #root {
     width: 100vw;
-    background-image: url('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1-landscape.jpg');
+    /* background-image: url('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1-landscape.jpg'); */
   }
   .width {
     width: 487.5px;
@@ -638,29 +654,35 @@ h1 {
   }
 }
 
-@media (min-width: 763px) {
+@media (min-width: 768px) {
   html {
-    font-size: 8px;
+    font-size: 20px;
   }
   .width {
-    width: 300px;
+    width: 675px;
   }
   .height {
-    height: 137.5px;
+    height: 450px;
   }
-  #first-col, #second-col {
-    height: 100px;
+  #autocomplete {
+    font-size: 1rem;
+    width: 85vw;
+    max-width: 675px;
   }
-  #temp-unit-button {
-    font-size: 1.5rem;
-    width: 150px;
+  #temp-unit-button, #display-mode {
+    font-size: 2rem;
   }
-  #display-mode-icon {
-    height: 25px;
+  #change-location-button {
+    font-size: 1.25rem;
   }
   #icon {
-    color: transparent;
-    height: 67.5px;
+    height: 6rem;
     margin: 0.5em 0;
+  }
+  #weather-loading, #location, #location-icon {
+    font-size: 2rem;
+  }
+  #temp-unit, #temp-span {
+    font-size: 5rem;
   }
 }
