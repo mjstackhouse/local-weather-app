@@ -255,7 +255,7 @@ h1 {
 }
 
 .shadow-2 {
-  box-shadow: 0.5px 5px 20px 10px rgb(0, 0, 0, 0.3);
+  box-shadow: 0.5px 5px 25px 7.5px rgb(0, 0, 0, 0.3);
 }
 
 .basis-full {
@@ -302,8 +302,11 @@ h1 {
   /* color: white; */
 }
 
-#change-location-button {
+#change-location-container {
   flex-basis: 50%;
+}
+
+#change-location-button {
   color: white;
   font-size: 1rem;
   background-color: transparent;
@@ -624,45 +627,27 @@ h1 {
 /* MEDIA QUERIES */
 
 /* 730, 315 */
-@media (min-width: 640px) {
+@media (min-width: 540px) {
   html {
-    font-size: 14px;
-  }
-  #root {
-    width: 100vw;
-    /* background-image: url('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1-landscape.jpg'); */
+    font-size: 17px;
   }
   .width {
-    width: 487.5px;
+    width: 450px;
   }
   .height {
-    height: 206.25px;
-  }
-  #first-col, #second-col {
-    height: 150px;
-  }
-  #temp-unit-button {
-    width: 150px;
-  }
-  #display-mode-icon {
-    height: 37.5px;
-  }
-  #icon {
-    color: transparent;
-    height: 101.25px;
-    margin: 0.5em 0;
+    height: 250px;
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   html {
-    font-size: 20px;
+    font-size: 18px;
   }
   .width {
-    width: 675px;
+    width: 500px;
   }
   .height {
-    height: 450px;
+    height: 300px;
   }
   #autocomplete {
     font-size: 1rem;
@@ -673,7 +658,7 @@ h1 {
     font-size: 2rem;
   }
   #change-location-button {
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
   #icon {
     height: 6rem;
@@ -684,5 +669,17 @@ h1 {
   }
   #temp-unit, #temp-span {
     font-size: 5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 20px;
+  }
+  .width {
+    width: 600px;
+  }
+  .height {
+    height: 350px;
   }
 }

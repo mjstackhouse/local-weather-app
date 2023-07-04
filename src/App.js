@@ -187,7 +187,9 @@ function App() {
         clearTimeout(timeoutId);
         $('#weather-loading').css('display', 'none');
         $('#weather-loading').removeClass('height');
-        $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1.jpg")');
+        
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1-landscape.jpg")');
+        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1.jpg")');
       }
       else if (hours >= 6 && hours < 10) {
         $('#app').css('background-color', 'transparent');
@@ -204,7 +206,9 @@ function App() {
         clearTimeout(timeoutId);
         $('#weather-loading').css('display', 'none');
         $('#weather-loading').removeClass('height');
-        $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-dusk-1.jpg")');
+
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-dusk-1-landscape-2.jpg")');
+        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-dusk-1.jpg")');
       }
       else if (hours >= 10 && hours < 18) {
         $('#app').css('color', 'black');
@@ -221,7 +225,9 @@ function App() {
         clearTimeout(timeoutId);
         $('#weather-loading').css('display', 'none');
         $('#weather-loading').removeClass('height');
-        $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-1.jpg")');
+
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-1-landscape.jpg")');
+        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-1.jpg")');
       }
       else if (hours >= 18 && hours < 21) {
         $('#app').css('background-color', 'transparent');
@@ -238,7 +244,9 @@ function App() {
         clearTimeout(timeoutId);
         $('#weather-loading').css('display', 'none');
         $('#weather-loading').removeClass('height');
-        $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunset-1.jpg")');
+
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunset-1-landscape.jpg")');
+        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunset-1.jpg")');
       }
 
       const locationQuery = `lon=${latAndLong[1]}&lat=${latAndLong[0]}`;
@@ -423,7 +431,9 @@ function App() {
           {/* <div id="button-container" className="width">
             <button id="temp-unit-button" className="button-2" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnitButton}</button>
           </div> */}
-          <button className='text-left' id='change-location-button' onClick={openLocationSearch}>Choose location</button>
+          <div id='change-location-container' className='text-left'>
+            <button id='change-location-button' onClick={openLocationSearch}>Choose location</button>
+          </div>
           <div id="brand-logo" className='text-left' hidden>
             <FontAwesomeIcon id='brand-icon' icon={faTemperatureLow} />
             <h1 id='brand-name'>WeatherHere</h1>
