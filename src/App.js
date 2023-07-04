@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import $ from 'jquery';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faClipboardList, faCloud, faWind, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faClipboardList, faCloud, faWind, faLocationDot, faEye, faLocationArrow, faArrowUpWideShort } from '@fortawesome/free-solid-svg-icons';
 import { faCloudRain } from '@fortawesome/free-solid-svg-icons';
 import { faSun } from '@fortawesome/free-solid-svg-icons';
 import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +13,7 @@ import { faCloudBolt } from '@fortawesome/free-solid-svg-icons';
 import { faDroplet } from '@fortawesome/free-solid-svg-icons';
 import { faMoon } from '@fortawesome/free-solid-svg-icons';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
-import {faDownLeftAndUpRightToCenter} from '@fortawesome/free-solid-svg-icons';
+import { faDownLeftAndUpRightToCenter } from '@fortawesome/free-solid-svg-icons';
 /* global google */
 
 
@@ -34,7 +34,10 @@ function App() {
   const [weatherIcon2, setWeatherIcon2] = useState(null);
   const [weatherType, setWeatherType] = useState(null);
   const [humidity, setHumidity] = useState(null);
-  const [wind, setWind] = useState(null);
+  const [windSpeed, setWindSpeed] = useState(null);
+  const [windDirection, setWindDirection] = useState(null);
+  const [windGust, setWindGust] = useState(null);
+  const [visibility, setVisibility] = useState(null);
   const [sunrise, setSunrise] = useState(null);
   const [sunset, setSunset] = useState(null);
   const [pressure, setPressure] = useState(null);
@@ -176,31 +179,37 @@ function App() {
         $('#app').css('color', 'white');
         $('#app').addClass('shadow-2');
         
+        $('#brand-text-container').css('background-color', '#1F1F1F');
         $('#location-search-div').css('background-color', '#1F1F1F');
         $('#brand-container').css('background-color', '#1F1F1F');
         $('#extra-info-section').css('background-color', '#1F1F1F');
+        $('#wind-outer-container').css('background-color', '#1F1F1F');
 
-        $('#icon').css('filter', 'brightness(1)');
+        // $('#icon').css('filter', 'brightness(1)');
 
         $('#app').css('background-color', '#024d89');
+        
         $('#root').css('background-color', 'transparent');
         clearTimeout(timeoutId);
         $('#weather-loading').css('display', 'none');
         $('#weather-loading').removeClass('height');
         
-        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1-landscape.jpg")');
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1-landscape-2.jpg")');
         else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1.jpg")');
       }
       else if (hours >= 6 && hours < 10) {
         $('#app').css('background-color', 'transparent');
+        // $('#wind-outer-container').css('background-color', 'transparent');
         $('#app').css('color', 'black');
         $('#app').removeClass('shadow-2');
 
+        $('#brand-text-container').css('background-color', 'black');
         $('#location-search-div').css('background-color', 'black');
         $('#brand-container').css('background-color', 'black');
         $('#extra-info-section').css('background-color', 'black');
+        $('#wind-outer-container').css('background-color', 'black');
 
-        $('#icon').css('filter', 'brightness(0)');
+        // $('#icon').css('filter', 'brightness(0)');
         
         $('#root').css('background-color', 'transparent');
         clearTimeout(timeoutId);
@@ -214,13 +223,16 @@ function App() {
         $('#app').css('color', 'black');
         $('#app').addClass('shadow-2');
 
+        $('#brand-text-container').css('background-color', 'black');
         $('#location-search-div').css('background-color', 'black');
         $('#brand-container').css('background-color', 'black');
         $('#extra-info-section').css('background-color', 'black');
+        $('#wind-outer-container').css('background-color', 'black');
 
-        $('#icon').css('filter', 'brightness(0)');
+        // $('#icon').css('filter', 'brightness(0)');
 
         $('#app').css('background-color', '#45c7f3');
+        // $('#wind-outer-container').css('background-color', '#024d89');
         $('#root').css('background-color', 'transparent');
         clearTimeout(timeoutId);
         $('#weather-loading').css('display', 'none');
@@ -231,15 +243,19 @@ function App() {
       }
       else if (hours >= 18 && hours < 21) {
         $('#app').css('background-color', 'transparent');
+        // $('#wind-outer-container').css('background-color', 'transparent');
         $('#app').css('color', 'black');
         $('#app').removeClass('shadow-2');
 
+        $('#brand-text-container').css('background-color', 'black');
         $('#location-search-div').css('background-color', 'black');
         $('#brand-container').css('background-color', 'black');
         $('#extra-info-section').css('background-color', 'black');
+        $('#wind-outer-container').css('background-color', 'black');
 
-        $('#icon').css('filter', 'brightness(0)');
+        // $('#icon').css('filter', 'brightness(0)');
 
+        $('#brand-text-container').css('background-color', 'black');
         $('#root').css('background-color', 'transparent');
         clearTimeout(timeoutId);
         $('#weather-loading').css('display', 'none');
@@ -257,39 +273,50 @@ function App() {
       // Clouds, Clear, Rain, Snow, Mist
       if (data.weather[0].main === 'Rain') {
         $('#icon').removeClass('spin-once');
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain.png');
+        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png');
         setWeatherType('Rain');
       }
       else if (data.weather[0].main === 'Clouds') {
         $('#icon').removeClass('spin-once');
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy.png');
+
+        if (hours >= 6 && hours < 21) {
+          // $('#icon').addClass('spin-once');
+          setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-sun-1b.png');
+        } 
+        else setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-moon-1b.png');
+
         setWeatherType('Clouds');
       }
       else if (data.weather[0].main === 'Clear') {
-        $('#icon').addClass('spin-once');
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adboestock-sunny.png');
+        if (hours >= 6 && hours < 21) {
+          $('#icon').addClass('spin-once');
+          setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunny-2.png');
+        } 
+        else setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-moon-1.png');
         setWeatherType('Clear');
       }
       else if (data.weather[0].main === 'Snow') {
         $('#icon').removeClass('spin-once');
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-snow.png');
+        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-snow-2b.png');
         setWeatherType('Snow');
       }
       else if (data.weather[0].main === 'Mist') {
-        $('#icon').css('color', 'gray');
+        // $('#icon').css('color', 'gray');
         $('#icon').removeClass('spin-once');
-        setWeatherIcon(faSmog);
+        // setWeatherIcon(faSmog);
+        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-mist-2.png');
         setWeatherType('Mist');
       }
       else if (data.weather[0].main === 'Thunderstorm') {
         $('#icon').removeClass('spin-once');
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-thunder.png');
+        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-thunderstorm-2b.png');
         setWeatherType('Thunderstorm');
       }
       
       $('#weather-info-container').css('display', 'grid');
       $('#location-container').css('display', 'flex');
-      $('#extra-info-container').css('display', 'flex');
+      $('#extra-info-section').css('display', 'flex');
+      $('#wind-outer-container').css('display', 'flex');
 
       const descriptionUpperCase = data.weather[0].description[0].toUpperCase();
       const description = descriptionUpperCase + data.weather[0].description.slice(1);
@@ -301,7 +328,17 @@ function App() {
       setLocation(data.name + ', ' + data.sys.country);
       setDescription(description);
       setHumidity(data.main.humidity);
-      setWind(data.wind.speed);
+      setWindSpeed(data.wind.speed);
+      setWindDirection(data.wind.deg);
+
+      const windDirectionIconRotation = data.wind.deg - 45;
+
+      $('#wind-direction-icon').css('transform', `rotate(${windDirectionIconRotation}deg)`);
+      
+      if (!data.wind.gust) setWindGust(0);
+      else setWindGust(data.wind.gust);
+
+      setVisibility(data.visibility / 1000);
       setPressure(data.main.pressure);
 
       const sunriseTime = new Date(data.sys.sunrise);
@@ -338,8 +375,8 @@ function App() {
     if (tempUnit === 'celsius') {
       convertedTemp = Math.round((temp * (9/5)) + 32);
       convertedFeelsLike = Math.round((feelsLike * (9/5)) + 32);
-      convertedHighTemp = Math.round((feelsLike * (9/5)) + 32);
-      convertedLowTemp = Math.round((feelsLike * (9/5)) + 32);
+      convertedHighTemp = Math.round((highTemp * (9/5)) + 32);
+      convertedLowTemp = Math.round((lowTemp * (9/5)) + 32);
       setTemp(convertedTemp);
       setFeelsLike(convertedFeelsLike);
       setHighTemp(convertedHighTemp);
@@ -426,7 +463,7 @@ function App() {
           <input id='autocomplete' name='autocomplete' className='expand' placeholder='Enter a location' type='text'/>
         </div>
       </div>
-      <div className='' id='brand-container'>
+      <div className='shadow-2' id='brand-container'>
         <div className='width' id='brand-container-2'>
           {/* <div id="button-container" className="width">
             <button id="temp-unit-button" className="button-2" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnitButton}</button>
@@ -448,7 +485,7 @@ function App() {
         </div>
       </div>
       <div id="app-container">
-        <div className='flex-wrap'>
+        <div className='flex-wrap width' id='app-container-child'>
           {/* <div id='location-container' className='basis-full go-up'>
             <div id="location" className="letter-spacing-4 shadow"><span id="location-text" className=''>{location}</span></div>
           </div> */}
@@ -480,17 +517,37 @@ function App() {
               </div>
             </div>
           </div>
-          <div className='' id='extra-info-section'>
-            <div className='go-down width' id='extra-info-container' hidden>
+          <div className='width extra-info-sections shadow-2' id='wind-outer-container'>
+            <div className='basis-full' id='wind-header-container'>
+              <p id='wind-header' className='extra-info-header letter-spacing-2'>Wind</p>
+            </div>
+            <div className='extra-info wind-info' id='wind-speed-container'>
+            <p className='wind-info-header letter-spacing-2'>Speed</p>
+              <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-icon" icon={faWind} />
+              <p className='extra-info-number' id="wind-speed">{windSpeed} mph</p>
+            </div>
+            <div className='extra-info wind-info' id='wind-direction-container'>
+              <p className='wind-info-header letter-spacing-2'>Direction</p>
+              <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-direction-icon" icon={faLocationArrow} />
+              <p className='extra-info-number' id="wind-direction">{windDirection} deg</p>
+            </div>
+            <div className='extra-info wind-info' id='wind-gust-container'>
+              <p className='wind-info-header letter-spacing-2'>Gust</p>
+              <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-gust-icon" icon={faArrowUpWideShort} />
+              <p className='extra-info-number' id="wind-gust">{windGust} mph</p>
+            </div>
+          </div>
+          <div className='extra-info-sections width shadow-2' id='extra-info-section' hidden>
+            <div className='go-down basis-full' id='extra-info-container'>
               <div id="humidity-container" className='shadow extra-info'>
                 <p id='humidity-header' className='extra-info-header letter-spacing-2'>Humidity</p>
                 <FontAwesomeIcon className='extra-info-icons' id='droplet' icon={faDroplet} />
                 <p className='extra-info-number' id="humidity-number">{humidity}%</p>
               </div>
-              <div id="wind-container" className='shadow extra-info'>
-                <p id='wind-header' className='extra-info-header letter-spacing-2'>Wind</p>
-                <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-icon" icon={faWind} />
-                <p className='extra-info-number' id="wind-number">{wind} mph</p>
+              <div id="visibility-container" className='shadow extra-info'>
+                <p id='visibility-header' className='extra-info-header letter-spacing-2'>Visibility</p>
+                <FontAwesomeIcon className='extra-info-icons gray-text' id="visibility-icon" icon={faEye} />
+                <p className='extra-info-number' id="visibility-number">{visibility} mi</p>
               </div>
               <div id="pressure-container" className='shadow extra-info'>
                 <p id='pressure-header' className='extra-info-header letter-spacing-2'>Pressure</p>
@@ -499,23 +556,7 @@ function App() {
               </div>
             </div>
           </div>
-          <div className='go-down' id='' hidden>
-            <div id="humidity-container" className='shadow extra-info mr-1 gray-border'>
-              <p id='humidity-header' className='extra-info-header letter-spacing-2'>Humidity</p>
-              <FontAwesomeIcon className='extra-info-icons' id='droplet' icon={faDroplet} />
-              <p id="humidity-number">{humidity}%</p>
-            </div>
-            <div id="wind-container" className='shadow extra-info mr-1 gray-border'>
-              <p id='wind-header' className='extra-info-header letter-spacing-2'>Wind</p>
-              <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-icon" icon={faWind} />
-              <p id="wind-number">{wind} mph</p>
-            </div>
-            <div id="pressure-container" className='shadow extra-info gray-border'>
-              <p id='pressure-header' className='extra-info-header letter-spacing-2'>Pressure</p>
-              <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-icon" icon={faDownLeftAndUpRightToCenter} />
-              <p id="pressure-number">{pressure} mb</p>
-            </div>
-          </div>
+          
           {/* <div id="button-container" className="width"> */}
             {/* <button id="temp-unit-button" className="button-2" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnitButton}</button> */}
             {/* <span id="display-mode-span">
@@ -528,6 +569,12 @@ function App() {
           {/* <div id="weather-bg">
             <img id="weather-icon-2" src={weatherIcon2} />
           </div> */}
+        </div>
+        <div id='brand-text-container' className=''>
+          <div id='brand-with-copyright'>
+            <span>Copyright © 2023</span>
+            <img id='brand-text' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/weatherapp-brand-text-white-2.png' />
+          </div>
         </div>
       </div>
     </div>

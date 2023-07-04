@@ -13,13 +13,13 @@ html {
   /* min-width: 100vw; */
   /* background-color: #4D4D4D; */
   /* background-image: radial-gradient(circle at center, #6E7B81 2.5%, #4D565B 75%, #3F474A 100%); */
-  background-color: #1F1F1F;
+  background-color: black;
   background-image: none;
   /* background-color: #FFFFFF; */
   letter-spacing: 1px !important;
   /* background-image: url('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1.jpg'); */
   background-size: cover;
-  transition: background-image 2s ease-in;
+  transition: background-image 2s linear, background-color 2s linear;
 }
 
 h1 {
@@ -38,7 +38,63 @@ h1 {
   /* background-color: #024d89; */
   /* background-blend-mode: color-dodge; */
   /* background-color: rgba(2, 77, 137, 0.9); */
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+#wind-outer-container {
+  display: none;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin-bottom: 0.5rem;
+}
+
+#brand-text-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  background-color: #1f1f1f;
+  color: white;
+  width: 100vw;
+  height: 2rem;
+  align-items: center;
+  /* margin-top: auto; */
+  /* text-align: center; */
+}
+
+#brand-with-copyright {
+  font-size: 0.75rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
+
+#brand-text {
+  /* position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1rem; */
+  height: 1rem;
+
+}
+
+.extra-info-sections {
+  display: none;
+  font-size: 0.75rem;
+  /* flex-wrap: wrap; */
+  /* flex-direction: row; */
+  color: white;
+  border-radius: 1rem;
+  background-color: transparent;
+  transition: background-color 2s ease-in;
+}
+
+.wind-info {
+  display: inline;
+  flex-basis: 33%;
 }
 
 #autocomplete-div {
@@ -77,7 +133,12 @@ h1 {
   height: calc(100vh - 4rem);
   min-width: 100vw;
   filter: blur(0px);
-  transition: all 0.5s linear;
+  /* transition: display 0.5s linear; */
+}
+
+#app-container-child {
+  /* height: calc(100vh - 4rem); */
+  padding: 2rem 0;
 }
 
 #app {
@@ -87,7 +148,7 @@ h1 {
   align-items: center;
   justify-content: center;
   background-color: transparent;
-  transition: all 0.5 linear;
+  /* transition: background-color 2s linear; */
 }
 
 .gray-border {
@@ -111,7 +172,8 @@ h1 {
   width: 100vw;
   height: 4rem;
   filter: blur(0px);
-  transition: all 0.5s linear;
+  transition: background-color 2s linear;
+  z-index: 10;
 }
 
 #brand-container-2 {
@@ -255,7 +317,7 @@ h1 {
 }
 
 .shadow-2 {
-  box-shadow: 0.5px 5px 25px 7.5px rgb(0, 0, 0, 0.3);
+  box-shadow: 0.5px 2.5px 20px 5px rgb(0, 0, 0, 0.3);
 }
 
 .basis-full {
@@ -267,14 +329,14 @@ h1 {
 }
 
 .height {
-  height: 250px;
+  height: 215px;
 }
 
 #weather-loading {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1rem;
   margin: 0 auto;
 }
 
@@ -403,7 +465,7 @@ h1 {
 #first-col, #second-col {
   /* height: 250px; */
   justify-items: center;
-  padding-bottom: 1rem;
+  /* padding-bottom: 1rem; */
 }
 
 .flex-nowrap {
@@ -446,8 +508,8 @@ h1 {
   color: transparent;
   height: 6rem;
   margin: 0.5em 0;
-  filter: brightness(1);
-  transition: all 0.5s linear;
+  /* filter: brightness(1); */
+  transition: color 2s linear;
 }
 
 #feels-like {
@@ -457,14 +519,15 @@ h1 {
 }
 
 #extra-info-section {
-  flex-basis: 100%;
-  width: 100vw;
+  /* flex-basis: 100%; */
+  /* width: 100vw; */
   margin-bottom: 1rem;
   background-color: #1F1F1F;
-  transition: all 0.5s linear;
+  transition: background-color 2s linear;
 }
 
 #extra-info-container {
+  display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
@@ -534,8 +597,8 @@ h1 {
 #location-container {
   display: none;
   align-items: center;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
+  /* padding-bottom: 0.5rem; */
 }
 
 .go-up {
@@ -551,12 +614,32 @@ h1 {
 } */
 
 .extra-info-header {
-  font-size: 1rem;
+  /* font-size: 0.75rem; */
   font-weight: bold;
 }
 
+/* #wind-header-container {
+
+} */
+
+#wind-header {
+  border-bottom: 0.5px solid gray;
+  padding-bottom: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.wind-info-header {
+  /* font-size: 1rem; */
+  font-weight: normal;
+  margin-top: 0;
+}
+
+#wind-direction-icon {
+  color: white;
+}
+
 .extra-info-number {
-  font-size: 1rem;
+  /* font-size: 1rem; */
 }
 
 .letter-spacing-2 {
@@ -568,7 +651,7 @@ h1 {
 }
 
 .extra-info {
-  font-size: 1.4rem;
+  /* font-size: 1.4rem; */
   flex-basis: 33%;
   color: white;
   /* padding: 0 0.5rem; */
@@ -581,7 +664,8 @@ h1 {
 }
 
 .extra-info-icons {
-  font-size: 2.5rem;  
+  font-size: 2rem;
+  color: white;
 }
 
 #droplet {
@@ -661,14 +745,21 @@ h1 {
     font-size: 1rem;
   }
   #icon {
-    height: 6rem;
+    height: 8rem;
     margin: 0.5em 0;
+    /* filter: drop-shadow(0 1px 20px rgba(0, 0, 0, 0.25)); */
   }
   #weather-loading, #location, #location-icon {
     font-size: 2rem;
   }
   #temp-unit, #temp-span {
     font-size: 5rem;
+  }
+  .App {
+    /* margin-bottom: 2rem; */
+  }
+  #wind-outer-container {
+    /* margin-bottom: 1rem; */
   }
 }
 
