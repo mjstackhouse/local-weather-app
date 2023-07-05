@@ -636,6 +636,8 @@ h1 {
 
 #wind-direction-icon {
   color: white;
+  transform: rotate(0);
+  transition: transform 1s ease;
 }
 
 .extra-info-number {
