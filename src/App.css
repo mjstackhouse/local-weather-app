@@ -1,6 +1,6 @@
 html {
   font-size: 16px;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 #root {
@@ -92,6 +92,49 @@ h1 {
   transition: background-color 2s ease-in;
 }
 
+#hourly-forecast-container {
+  display: none;
+  /* flex-wrap: wrap; */
+  overflow-x: scroll;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Hide scrollbar: https://www.w3schools.com/howto/howto_css_hide_scrollbars.asp */
+/* Hide scrollbar for Chrome, Safari and Opera */
+#hourly-forecast-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#hourly-forecast-container {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+#hourly-forecast-header {
+  
+}
+
+.hourly-forecast-span {
+  width: 3rem;
+  margin-right: 0.6rem;
+}
+
+.hourly-forecast-span:last-of-type {
+  margin-right: 0;
+}
+
+.hourly-forecast-hour {
+  width: 3rem;
+  margin-bottom: 0.25rem;
+}
+
+.hourly-forecast-icon {
+  height: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
 .wind-info {
   display: inline;
   flex-basis: 33%;
@@ -129,7 +172,7 @@ h1 {
   text-align: center;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   height: calc(100vh - 4rem);
   min-width: 100vw;
   filter: blur(0px);
@@ -138,7 +181,7 @@ h1 {
 
 #app-container-child {
   /* height: calc(100vh - 4rem); */
-  padding: 2rem 0;
+  /* padding: 2rem 0; */
 }
 
 #app {
@@ -325,7 +368,7 @@ h1 {
 }
 
 .width {
-  width: 350px;
+  width: 300px;
 }
 
 .height {
@@ -712,6 +755,15 @@ h1 {
 
 /* MEDIA QUERIES */
 
+@media (min-width: 375px) {
+  .width {
+    width: 345px;
+  }
+  #high-text, #low-text {
+    display: inline;
+  }
+}
+
 /* 730, 315 */
 @media (min-width: 540px) {
   html {
@@ -775,4 +827,18 @@ h1 {
   .height {
     height: 350px;
   }
+}
+
+@media (min-width: 1024px) {
+  /* Hide scrollbar: https://www.w3schools.com/howto/howto_css_hide_scrollbars.asp */
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  /* #hourly-forecast-container::-webkit-scrollbar {
+    display: block;
+  } */
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  /* #hourly-forecast-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    /* scrollbar-width: none;  Firefox */
+  /* } */
 }
