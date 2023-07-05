@@ -18,7 +18,12 @@ import { faDownLeftAndUpRightToCenter } from '@fortawesome/free-solid-svg-icons'
 
 
 function App() {
+
+  const SNOW_CODES = [1066, 1069, 1114, 1117, 1204, 1207, 1210, 1213, 1216, 1219, 1222, 1225, 1237, 1249, 1252, 1255, 1258, 1261, 1264];
+  const RAIN_CODES = [1063, 1072, 1150, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1240, 1243, 1246];
+  const THUNDER_CODES = [1087, 1273, 1276, 1279, 1282];
   
+  // Current
   const [tempUnit, setTempUnit] = useState(null);
   const [temp, setTemp] = useState(null);
   const [lowTemp, setLowTemp] = useState(null);
@@ -41,6 +46,12 @@ function App() {
   const [sunset, setSunset] = useState(null);
   const [pressure, setPressure] = useState(null);
   const [displayMode, setDisplayMode] = useState('dark');
+
+  // Hourly Forecast
+  const [hourlyForecastOne, setHourlyForecastOne] = useState(null);
+
+  // 3 Day Forecast
+
 
   const userTempUnitRef = useRef(null);
   const userLocationPermissionRef = useRef(null);
@@ -171,7 +182,6 @@ function App() {
         }));
 
         geolocationObj.getCurrentPosition(async (position) => {
-          // setUserLocationPermission('granted');
           userLocationPermissionRef.current = 'granted';
           displayLoadingText('Loading your local weather');
           coordinates = position.coords;
@@ -192,7 +202,7 @@ function App() {
                 fetchData();
               }
             }));
-        });
+        }, { enableHighAccuracy: true });
       }
     }
   }, [tempUnit, temp, feelsLike, fetched, weatherIcon, sunset, sunrise, setSunrise, setSunset, setWeatherIcon]);
@@ -209,6 +219,7 @@ function App() {
         $('#brand-container').css('background-color', '#1F1F1F');
         $('#extra-info-section').css('background-color', '#1F1F1F');
         $('#wind-outer-container').css('background-color', '#1F1F1F');
+        $('#hourly-forecast-container').css('background-color', '#1F1F1F');
 
         // $('#icon').css('filter', 'brightness(1)');
 
@@ -233,6 +244,7 @@ function App() {
         $('#brand-container').css('background-color', 'black');
         $('#extra-info-section').css('background-color', 'black');
         $('#wind-outer-container').css('background-color', 'black');
+        $('#hourly-forecast-container').css('background-color', 'black');
 
         // $('#icon').css('filter', 'brightness(0)');
         
@@ -253,6 +265,7 @@ function App() {
         $('#brand-container').css('background-color', 'black');
         $('#extra-info-section').css('background-color', 'black');
         $('#wind-outer-container').css('background-color', 'black');
+        $('#hourly-forecast-container').css('background-color', 'black');
 
         // $('#icon').css('filter', 'brightness(0)');
 
@@ -277,6 +290,7 @@ function App() {
         $('#brand-container').css('background-color', 'black');
         $('#extra-info-section').css('background-color', 'black');
         $('#wind-outer-container').css('background-color', 'black');
+        $('#hourly-forecast-container').css('background-color', 'black');
 
         // $('#icon').css('filter', 'brightness(0)');
 
@@ -306,63 +320,21 @@ function App() {
       // console.log('forecastData: ', forecastData);
       console.log('data: ', data);
 
-      const SNOW_CODES = [1066, 1069, 1114, 1117, 1204, 1207, 1210, 1213, 1216, 1219, 1222, 1225, 1237, 1249, 1252, 1255, 1258, 1261, 1264];
-      const RAIN_CODES = [1063, 1072, 1150, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1240, 1243, 1246];
-      const THUNDER_CODES = [1087, 1273, 1276, 1279, 1282];
+      // data.forecast.forecastday[0].hour[0].time or data.forecast.forecastday[0].hour[0].time_epoch
+      // data.forecast.forecastday[0].hour[0].condition.code to display icon
+      // data.forecast.forecastday[0].hour[0].temp_c
+      // data.forecast.forecastday[0].hour[0].temp_f
+      // data.forecast.forecastday[0].hour[0].chance_of_rain
 
-      // Clear
-      if (data.current.condition.text === 'Clear') {
-        if (hours >= 6 && hours < 21) {
-          $('#icon').addClass('spin-once');
-          setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunny-2.png');
-        } 
-        else setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-moon-1.png');
-        setWeatherType('Clear');
-      }
-      // Mist
-      else if (data.current.condition.text === 'Mist') {
-        $('#icon').removeClass('spin-once');
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-mist-2.png');
-        setWeatherType('Mist');
-      }
-      // Partly cloudy
-      else if (data.current.condition.text === 'Partly cloudy') {
-        $('#icon').removeClass('spin-once');
-
-        if (hours >= 6 && hours < 21) {
-          // $('#icon').addClass('spin-once');
-          setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-sun-1b.png');
-        } 
-        else setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-moon-1b.png');
-        setWeatherType('Clouds');
-      }
-      // Cloudy / Overcast
-      else if (data.current.condition.text === 'Cloudy' || data.current.condition.text === 'Overcast') {
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-gray.png');
-      }
-      // Thunder
-      else if (THUNDER_CODES.indexOf(data.current.condition.code) !== -1) {
-        $('#icon').removeClass('spin-once');
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-thunderstorm-2b.png');
-        setWeatherType('Thunderstorm');
-      }
-      // Rain
-      else if (RAIN_CODES.indexOf(data.current.condition.code) !== -1) {
-        $('#icon').removeClass('spin-once');
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png');
-        setWeatherType('Rain');
-      }
-      // Snow
-      else if (SNOW_CODES.indexOf(data.current.condition.code) !== -1) {
-        $('#icon').removeClass('spin-once');
-        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-snow-2b.png');
-        setWeatherType('Snow');
-      }
+      // Current weather icon
+      console.log('data.current.condition.text: ', data.current.condition.text);
+      setHourlyForecastOne(data.forecast.forecastday[0].hour[0]);
       
       $('#weather-info-container').css('display', 'grid');
       $('#location-container').css('display', 'flex');
       $('#extra-info-section').css('display', 'flex');
       $('#wind-outer-container').css('display', 'flex');
+      $('#hourly-forecast-container').css('display', 'flex');
 
       const description = data.current.condition.text;
       const descriptionSplit = description.split(' ');
@@ -377,6 +349,60 @@ function App() {
           userTempUnitRef.current = '°F';
         }
 
+        for (let i = hours + 1; i < data.forecast.forecastday[0].hour.length; i++) {
+          const element = data.forecast.forecastday[0].hour[i];
+
+          let timeSplit, hour, iconSource, hourlyTemp, highHourConverted;
+          timeSplit = element.time.split(' ');
+          if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) hour = '12 am';
+            else hour = `${timeSplit[1][1]} am`;
+          }
+          else {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) hour = '10 am';
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) hour = '11 am';
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) hour = '12 pm';
+            else {
+              highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
+              hour = `${highHourConverted} pm`;
+            }
+          }
+          iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour);
+          hourlyTemp = Math.round(element.temp_f);
+
+          console.log('iconSource: ', iconSource);
+          $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
+        };
+
+        let hoursLeft = 24 - (24 - hours - 2);
+
+        for (let i = 0; i < hoursLeft; i++) {
+          console.log('i in second day: ', i);
+
+          const element = data.forecast.forecastday[1].hour[i];
+
+          let timeSplit, hour, iconSource, hourlyTemp, highHourConverted;
+          timeSplit = element.time.split(' ');
+          if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) hour = '12 am';
+            else hour = `${timeSplit[1][1]} am`;
+          }
+          else {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) hour = '10 am';
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) hour = '11 am';
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) hour = '12 pm';
+            else {
+              highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
+              hour = `${highHourConverted} pm`;
+            }
+          }
+          iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour);
+          hourlyTemp = Math.round(element.temp_f);
+
+          $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
+        };
+
+        selectWeatherIcon(data.current.condition.text, data.current.condition.code, hours);
         setTemp(Math.round(data.current.temp_f));
         setLowTemp(Math.round(data.forecast.forecastday[0].day.mintemp_f));
         setHighTemp(Math.round(data.forecast.forecastday[0].day.maxtemp_f));
@@ -464,6 +490,73 @@ function App() {
       closeLocationSearch();
       $('#autocomplete').val('');
     }
+  }
+
+  function selectWeatherIcon(conditionText, conditionCode, hours) {
+    let iconLink;
+
+    // Partly cloudy
+    if (conditionText === 'Partly cloudy') {
+      $('#icon').removeClass('spin-once');
+
+      if (hours >= 6 && hours < 21) {
+        // $('#icon').addClass('spin-once');
+        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-sun-1b.png');
+        iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-sun-1b.png';
+      } 
+      else {
+        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-moon-1b.png');
+        iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-moon-1b.png';
+      }
+      setWeatherType('Clouds');
+    }
+    // Clear
+    else if (conditionText === 'Clear' || conditionText === 'Sunny') {
+      if (hours >= 6 && hours < 21) {
+        $('#icon').addClass('spin-once');
+        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunny-2.png');
+        iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunny-2.png';
+      } 
+      else {
+        setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-moon-1.png');
+        iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-moon-1.png';
+      }
+      setWeatherType('Clear');
+    }
+    // Cloudy / Overcast
+    else if (conditionText === 'Cloudy' || conditionText === 'Overcast') {
+      setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-gray.png');
+      iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-gray.png';
+    }
+    // Mist and Fog
+    else if (conditionText === 'Mist' || conditionText === 'Fog' || conditionText === 'Freezing fog') {
+      $('#icon').removeClass('spin-once');
+      setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-mist-2.png');
+      setWeatherType('Mist');
+      iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-mist-2.png';
+    }
+    // Thunder
+    else if (THUNDER_CODES.indexOf(conditionCode) !== -1) {
+      $('#icon').removeClass('spin-once');
+      setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-thunderstorm-2b.png');
+      iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-thunderstorm-2b.png';
+      setWeatherType('Thunderstorm');
+    }
+    // Rain
+    else if (RAIN_CODES.indexOf(conditionCode) !== -1) {
+      $('#icon').removeClass('spin-once');
+      setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png');
+      iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png';
+      setWeatherType('Rain');
+    }
+    // Snow
+    else if (SNOW_CODES.indexOf(conditionCode) !== -1) {
+      $('#icon').removeClass('spin-once');
+      setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-snow-2b.png');
+      iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-snow-2b.png';
+      setWeatherType('Snow');
+    }
+    return iconLink;
   }
 
   function displayLoadingText(text) {
@@ -615,7 +708,7 @@ function App() {
                   <div id='feels-like'><span className=''>Feels like</span> {feelsLike}°</div>
                 </div>
                 <div id='high-low'>
-                  <span><span id='high-text' className='font-bold'>High</span> {highTemp}° | <span id='low-text' className='font-bold'>Low</span> {lowTemp}°</span>
+                  <span><span id='high-text' className='font-bold' hidden>High</span> {highTemp}° | <span id='low-text' className='font-bold' hidden>Low</span> {lowTemp}°</span>
                 </div>
               </div>
               <div id="second-col" className='flex-wrap'>
@@ -625,6 +718,11 @@ function App() {
                   <p id="description-text" className='letter-spacing-2'>{description}</p>
                 </div>
               </div>
+            </div>
+          </div>
+          <div className='width extra-info-sections shadow-2' id='hourly-forecast-container'>
+            <div>
+              {/* <p id='hourly-forecast-header' className='extra-info-header letter-spacing-2 basis-full'>Hourly</p> */}
             </div>
           </div>
           <div className='width extra-info-sections shadow-2' id='wind-outer-container'>
@@ -666,18 +764,6 @@ function App() {
               </div>
             </div>
           </div>
-          {/* <div id="button-container" className="width"> */}
-            {/* <button id="temp-unit-button" className="button-2" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnitButton}</button> */}
-            {/* <span id="display-mode-span">
-              <button id="display-mode" aria-label="switch-display-mode" className="button-2" name="switch-display-mode" onClick={changeDisplayMode}>
-                <FontAwesomeIcon id="display-mode-icon" icon={faMoon} />
-              </button>
-              <span id="display-mode-text" hidden>switch to light mode</span>
-            </span> */}
-          {/* </div> */}
-          {/* <div id="weather-bg">
-            <img id="weather-icon-2" src={weatherIcon2} />
-          </div> */}
         </div>
         <div id='brand-text-container' className=''>
           <div id='brand-with-copyright'>
