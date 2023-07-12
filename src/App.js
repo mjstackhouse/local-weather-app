@@ -89,7 +89,7 @@ function App() {
   const weatherInfoContainer = document.getElementById('weather-info-container');
   // const api = 'https://weather-proxy.freecodecamp.rocks/api/current?';
   // const CURRENT_API = `http://api.weatherapi.com/v1/current.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&q=`;
-  const FORECAST_API = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&days=3&alerts=yes&aqi=yes&q=`;
+  const FORECAST_API = `https://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&days=3&alerts=yes&aqi=yes&q=`;
   
   // let locationRetrieved = false;
   let latAndLong = [];
