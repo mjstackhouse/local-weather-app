@@ -77,7 +77,10 @@ h1 {
 
 #weather-api-credit {
   font-size: 0.75rem;
-  /* color: white; */
+}
+
+a {
+  color: #A3A3A3;
 }
 
 a:hover {
@@ -85,7 +88,6 @@ a:hover {
 }
 
 a:visited {
-  /* color: white; */
   color: #A3A3A3;
 }
 
@@ -217,7 +219,7 @@ a:visited {
   width: 260px;
   font-size: 1rem;
   height: 2rem;
-  margin: 0 2rem;
+  margin: 4rem auto;
   border-radius: 1.5rem;
   border-style: none;
   padding: 0 1rem;
@@ -521,6 +523,9 @@ button {
   position: fixed;
   top: 1rem;
   left: 1rem;
+  /* margin-top: 1rem; */
+  /* margin-left: 1rem; */
+  /* margin-bottom: 1rem; */
   color: white;
   font-size: 2rem;
   background-color: transparent;
@@ -531,14 +536,16 @@ button {
 
 #location-search-div {
   display: none;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  align-items: start;
+  flex-wrap: wrap;
+  flex-direction: row;
   width: 100vw;
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  right: -100vw;
+  right: 0;
   bottom: 0;
   /* background-color: black; */
   /* background-color: #1F1F1F; */
@@ -547,7 +554,7 @@ button {
   /* opacity: 98%; */
   /* background-image: radial-gradient(circle at center, #6E7B81 2.5%, #4D565B 75%, #3F474A 100%); */
   z-index: 10;
-  transition: all 300ms linear;
+  /* transition: all 300ms linear; */
   touch-action: none;
 }
 
@@ -987,15 +994,24 @@ button {
 
 /* MEDIA QUERIES */
 
-@media (min-width: 375px) {
+@media (min-width: 350px) {
   .width {
-    width: 345px;
+    width: 330px;
   }
   #high-text, #low-text {
     display: inline;
   }
   #autocomplete {
     width: 315px;
+  }
+}
+
+@media (min-width: 375px) {
+  .width {
+    width: 345px;
+  }
+  #high-text, #low-text {
+    display: inline;
   }
 }
 
@@ -1073,6 +1089,9 @@ button {
   }
   .height {
     height: 350px;
+  }
+  #autocomplete {
+    margin: auto;
   }
 }
 

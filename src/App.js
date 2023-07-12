@@ -1082,24 +1082,22 @@ function App() {
     $('#autocomplete').addClass('expand');
     $('#location-search-div').css('display', 'flex');
     $('#location-search-div').css('flex-direction', 'column');
+    $('html').css('overflow-y', 'hidden');
   }
 
   function closeLocationSearch() {
     $('#autocomplete').removeClass('expand');
     $('#location-search-div').css('display', 'none');
+    $('html').css('overflow-y', 'visible');
   }
 
   return (
     <div id='outermost-container'>
       <div className='' id='location-search-div'>
-        <div>
-          <button onClick={closeLocationSearch} id='close-location-search'><FontAwesomeIcon className="" icon={faXmark} /></button>
-        </div>
-        <div>
+        <button onClick={closeLocationSearch} id='close-location-search'><FontAwesomeIcon className="" icon={faXmark} /></button>
           {/* <label htmlFor='autocomplete'></label> */}
           <p id='invalid-location-feedback'></p>
           <input id='autocomplete' name='autocomplete' className='expand' placeholder='Enter a location' type='text'/>
-        </div>
       </div>
       <div className='shadow-2' id='navbar-container'>
         <div className='width' id='navbar-container-2'>
