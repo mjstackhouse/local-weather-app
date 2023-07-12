@@ -20,7 +20,7 @@ import { faDownLeftAndUpRightToCenter } from '@fortawesome/free-solid-svg-icons'
 function App() {
 
   const SNOW_CODES = [1066, 1069, 1114, 1117, 1204, 1207, 1210, 1213, 1216, 1219, 1222, 1225, 1237, 1249, 1252, 1255, 1258, 1261, 1264];
-  const RAIN_CODES = [1063, 1072, 1150, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1240, 1243, 1246];
+  const RAIN_CODES = [1063, 1072, 1150, 1153, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1240, 1243, 1246];
   const THUNDER_CODES = [1087, 1273, 1276, 1279, 1282];
   
   // Current
@@ -42,8 +42,12 @@ function App() {
   const [windDirection, setWindDirection] = useState(null);
   const [windGust, setWindGust] = useState(null);
   const [visibility, setVisibility] = useState(null);
-  const [sunrise, setSunrise] = useState(null);
-  const [sunset, setSunset] = useState(null);
+  const [sunriseTime, setSunrise] = useState(null);
+  const [sunsetTime, setSunset] = useState(null);
+  const [uvIndex, setUVIndex] = useState(null);
+  const [uvIndexDescription, setUVIndexDescription] = useState(null);
+  const [airQuality, setAirQuality] = useState(null);
+  const [airQualityDescription, setAirQualityDescription] = useState(null);
   const [pressure, setPressure] = useState(null);
   const [displayMode, setDisplayMode] = useState('dark');
 
@@ -73,6 +77,11 @@ function App() {
   const visibilityKm = useRef(null);
   const pressureIn = useRef(null);
   const pressureMb = useRef(null);
+  
+  const hourlyForecastArrRef = useRef([]);
+  let hourlyForecastArr;
+  const dailyForecastArrRef = useRef([]);
+  let dailyForecastArr;
 
   const weatherLoadingDiv = document.getElementById('weather-loading');
   const newWeatherLoadingInput = document.getElementById('autocomplete');
@@ -164,10 +173,17 @@ function App() {
         const timeNow = new Date();
         const timeUTCHours = timeNow.getUTCHours();
         const offsetHours = timezoneOffset / 60;
+
+        console.log('timeUTCHours & offsetHours', timeUTCHours, offsetHours);
+
         timeHours = timeUTCHours + offsetHours;
+
+        if (timeHours >= 23) timeHours = timeHours - 24;
+
         latAndLong = [];
         latAndLong.push(Number(latitude));
         latAndLong.push(Number(longitude));
+        console.log('timeHours: ', timeHours);
         locationRetrieved.current = true;
         fetchAndDisplayWeather(timeHours);
       }
@@ -205,10 +221,13 @@ function App() {
         }, { enableHighAccuracy: true });
       }
     }
-  }, [tempUnit, temp, feelsLike, fetched, weatherIcon, sunset, sunrise, setSunrise, setSunset, setWeatherIcon]);
+  }, [tempUnit, temp, feelsLike, fetched, weatherIcon, sunsetTime, sunriseTime, setSunrise, setSunset, setWeatherIcon]);
 
 
   async function fetchAndDisplayWeather(hours) {
+    $('#app').addClass('height');
+    $('.App').css('margin-bottom', '1.5rem');
+
     if (locationRetrieved.current === true) {
       if (hours >= 21 || (hours >= 0 && hours < 6)) {
         $('#app').css('color', 'white');
@@ -216,10 +235,13 @@ function App() {
         
         $('#brand-text-container').css('background-color', '#1F1F1F');
         $('#location-search-div').css('background-color', '#1F1F1F');
-        $('#brand-container').css('background-color', '#1F1F1F');
-        $('#extra-info-section').css('background-color', '#1F1F1F');
-        $('#wind-outer-container').css('background-color', '#1F1F1F');
-        $('#hourly-forecast-container').css('background-color', '#1F1F1F');
+        $('#navbar-container').css('background-color', '#1F1F1F');
+        $('.uv-air-number').css('background-color', '#1F1F1F');
+        // $('#extra-info-section').css('background-color', '#1F1F1F');
+        // $('#wind-outer-container').css('background-color', '#1F1F1F');
+        // $('#hourly-forecast-container').css('background-color', '#1F1F1F');
+        // $('#daily-forecast-container').css('background-color', '#1F1F1F');
+        $('.extra-info-sections').css('background-color', '#1F1F1F');
 
         // $('#icon').css('filter', 'brightness(1)');
 
@@ -241,10 +263,13 @@ function App() {
 
         $('#brand-text-container').css('background-color', 'black');
         $('#location-search-div').css('background-color', 'black');
-        $('#brand-container').css('background-color', 'black');
-        $('#extra-info-section').css('background-color', 'black');
-        $('#wind-outer-container').css('background-color', 'black');
-        $('#hourly-forecast-container').css('background-color', 'black');
+        $('#navbar-container').css('background-color', 'black');
+        $('.uv-air-number').css('background-color', 'black');
+        // $('#extra-info-section').css('background-color', 'black');
+        // $('#wind-outer-container').css('background-color', 'black');
+        // $('#hourly-forecast-container').css('background-color', 'black');
+        // $('#daily-forecast-container').css('background-color', 'black');
+        $('.extra-info-sections').css('background-color', 'black');
 
         // $('#icon').css('filter', 'brightness(0)');
         
@@ -262,10 +287,13 @@ function App() {
 
         $('#brand-text-container').css('background-color', 'black');
         $('#location-search-div').css('background-color', 'black');
-        $('#brand-container').css('background-color', 'black');
-        $('#extra-info-section').css('background-color', 'black');
-        $('#wind-outer-container').css('background-color', 'black');
-        $('#hourly-forecast-container').css('background-color', 'black');
+        $('#navbar-container').css('background-color', 'black');
+        $('.uv-air-number').css('background-color', 'black');
+        // $('#extra-info-section').css('background-color', 'black');
+        // $('#wind-outer-container').css('background-color', 'black');
+        // $('#hourly-forecast-container').css('background-color', 'black');
+        // $('#daily-forecast-container').css('background-color', 'black');
+        $('.extra-info-sections').css('background-color', 'black');
 
         // $('#icon').css('filter', 'brightness(0)');
 
@@ -287,10 +315,13 @@ function App() {
 
         $('#brand-text-container').css('background-color', 'black');
         $('#location-search-div').css('background-color', 'black');
-        $('#brand-container').css('background-color', 'black');
-        $('#extra-info-section').css('background-color', 'black');
-        $('#wind-outer-container').css('background-color', 'black');
-        $('#hourly-forecast-container').css('background-color', 'black');
+        $('#navbar-container').css('background-color', 'black');
+        $('.uv-air-number').css('background-color', 'black');
+        // $('#extra-info-section').css('background-color', 'black');
+        // $('#wind-outer-container').css('background-color', 'black');
+        // $('#hourly-forecast-container').css('background-color', 'black');
+        // $('#daily-forecast-container').css('background-color', 'black');
+        $('.extra-info-sections').css('background-color', 'black');
 
         // $('#icon').css('filter', 'brightness(0)');
 
@@ -328,13 +359,16 @@ function App() {
 
       // Current weather icon
       console.log('data.current.condition.text: ', data.current.condition.text);
-      setHourlyForecastOne(data.forecast.forecastday[0].hour[0]);
+      setHourlyForecastOne(data.forecast.forecastday);
       
       $('#weather-info-container').css('display', 'grid');
       $('#location-container').css('display', 'flex');
-      $('#extra-info-section').css('display', 'flex');
-      $('#wind-outer-container').css('display', 'flex');
-      $('#hourly-forecast-container').css('display', 'flex');
+      // $('#extra-info-section').css('display', 'flex');
+      // $('#wind-outer-container').css('display', 'flex');
+      // $('#hourly-forecast-container').css('display', 'flex');
+      // $('#daily-forecast-container').css('display', 'flex');
+      $('#sunrise-sunset-container').css('display', 'flex');
+      $('.extra-info-sections').css('display', 'flex');
 
       const description = data.current.condition.text;
       const descriptionSplit = description.split(' ');
@@ -343,64 +377,183 @@ function App() {
       else $('#description-div').css('font-size', '1rem');
 
       const FAHRENHEIT_COUNTRIES = ['United States of America', 'Belize', 'Liberia', 'Bahamas', 'Cyprus', 'Montserrat', 'Palau', 'Turks and Caicos Islands', 'Saint Kitts and Nevis', 'Cayman Islands', 'Antigua and Barbuda', 'Virgin Islands', 'Marshall Islands', 'Micronesia'];
+      
+      // Empty the hourly forecast to prepare for a new location's information
+      hourlyForecastArr = [];
+      dailyForecastArr = [];
+      $('#hourly-forecast-container').html('');
+      $('#daily-forecast-container').html('');
+
+      let dayOfForecast;
+      let newHours = hours;
+
+      if (hours === 23) {
+        dayOfForecast = 1;
+        newHours = 0;
+      }
+      else {
+        dayOfForecast = 0;
+        newHours = hours + 1;
+      } 
+
+      // console.log('hours: ', hours);
 
       if ((userTempUnitRef.current === '°F' && userLocationPermissionRef.current === 'granted') || FAHRENHEIT_COUNTRIES.indexOf(data.location.country) !== -1) {
         if (apiCallsCountRef.current === 1) {
           userTempUnitRef.current = '°F';
         }
 
-        for (let i = hours + 1; i < data.forecast.forecastday[0].hour.length; i++) {
-          const element = data.forecast.forecastday[0].hour[i];
+        // DAILY FORECAST LOOP
+        for (let i = 0; i < data.forecast.forecastday.length; i++) {
+          let dateFormatted = data.forecast.forecastday[i].date;
+          let date = new Date(data.forecast.forecastday[i].date_epoch * 1000);
+          let dayNum = date.getUTCDay();
+          let dayOfTheWeek;
+  
+          if (dayNum === 0) dayOfTheWeek = 'Sunday';
+          else if (dayNum === 1) dayOfTheWeek = 'Monday';
+          else if (dayNum === 2) dayOfTheWeek = 'Tuesday';
+          else if (dayNum === 3) dayOfTheWeek = 'Wednesday';
+          else if (dayNum === 4) dayOfTheWeek = 'Thursday';
+          else if (dayNum === 5) dayOfTheWeek = 'Friday';
+          else if (dayNum === 6) dayOfTheWeek = 'Saturday';
 
-          let timeSplit, hour, iconSource, hourlyTemp, highHourConverted;
+          if (i === 0) dayOfTheWeek = 'Today';
+
+          if (i === 0) console.log('dayNum: ', dayNum);
+
+          console.log('dayOfTheWeek: ', dayOfTheWeek);
+
+          let dateShortened = data.forecast.forecastday[i].date.slice(6, 11);
+  
+          dailyForecastArr.push({ 
+            mintemp_c: data.forecast.forecastday[i].day.mintemp_c,
+            mintemp_f: data.forecast.forecastday[i].day.mintemp_f,
+            maxtemp_c: data.forecast.forecastday[i].day.maxtemp_c,
+            maxtemp_f: data.forecast.forecastday[i].day.maxtemp_f,
+            day: dayOfTheWeek,
+            date: data.forecast.forecastday[i].date,
+            condition_text: data.forecast.forecastday[i].day.condition.text,
+            condition_code: data.forecast.forecastday[i].day.condition.code
+          });
+
+          let iconSource = selectWeatherIcon(data.forecast.forecastday[i].day.condition.text, data.forecast.forecastday[i].day.condition.code, 12);
+
+
+          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          else $('#daily-forecast-container').append(`<div class='daily-forecast-span gray-border basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          
+          // if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span basis-full'><span class='basis-33 text-left'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          // else $('#daily-forecast-container').append(`<div class='daily-forecast-span gray-border basis-full'><span class='basis-33 text-left'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+        }
+  
+        console.log('data.forecast.forecastday[dayOfForecast].hour: ', data.forecast.forecastday[dayOfForecast].hour);
+
+        console.log('hours: ', hours);
+
+        // HOURLY FORECAST LOOP 1
+        for (let i = newHours; i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
+          console.log('i: ', i);
+          // console.log('data.forecast.forecastday[0].hour[i]: ', data.forecast.forecastday[0].hour[i]);
+
+          const element = data.forecast.forecastday[dayOfForecast].hour[i];
+
+          let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
+
           timeSplit = element.time.split(' ');
           if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
-            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) hour = '12 am';
-            else hour = `${timeSplit[1][1]} am`;
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) {
+              hour = '12 am';
+              hour24 = 0;
+            }
+            else {
+              hour = `${timeSplit[1][1]} am`;
+              hour24 = Number(timeSplit[1][1]);
+            }
           }
           else {
-            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) hour = '10 am';
-            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) hour = '11 am';
-            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) hour = '12 pm';
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) {
+              hour = '10 am';
+              hour24 = 10;
+            }
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) {
+              hour = '11 am';
+              hour24 = 11;
+            } 
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) {
+              hour = '12 pm';
+              hour24 = 12;
+            } 
             else {
               highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
               hour = `${highHourConverted} pm`;
+              hour24 = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`);
             }
           }
-          iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour);
+          console.log('hour in first fahrenheit for loop: ', hour);
+          iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour24);
           hourlyTemp = Math.round(element.temp_f);
+          hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
 
           console.log('iconSource: ', iconSource);
           $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
         };
 
-        let hoursLeft = 24 - (24 - hours - 2);
+        let hoursLeft;
+        
+        if (hours === 23) hoursLeft = 1;
+        else hoursLeft = 24 - (24 - hours - 2);
 
-        for (let i = 0; i < hoursLeft; i++) {
-          console.log('i in second day: ', i);
+        console.log('hoursLeft: ', hoursLeft);
 
-          const element = data.forecast.forecastday[1].hour[i];
+        // HOURLY FORECAST LOOP 2
+        // if (dayOfForecast === 0) {
+          for (let i = 0; i < hoursLeft; i++) {
+            // console.log('i in second day: ', i);
+  
+            const element = data.forecast.forecastday[dayOfForecast + 1].hour[i];
+  
+            let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
 
-          let timeSplit, hour, iconSource, hourlyTemp, highHourConverted;
-          timeSplit = element.time.split(' ');
-          if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
-            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) hour = '12 am';
-            else hour = `${timeSplit[1][1]} am`;
-          }
-          else {
-            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) hour = '10 am';
-            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) hour = '11 am';
-            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) hour = '12 pm';
-            else {
-              highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
-              hour = `${highHourConverted} pm`;
+            console.log('element: ', element);
+            timeSplit = element.time.split(' ');
+
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
+              if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) {
+                hour = '12 am';
+                hour24 = 0;
+              }
+              else {
+                hour = `${timeSplit[1][1]} am`;
+                hour24 = Number(timeSplit[1][1]);
+              }
             }
-          }
-          iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour);
-          hourlyTemp = Math.round(element.temp_f);
-
-          $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
-        };
+            else {
+              if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) {
+                hour = '10 am';
+                hour24 = 10;
+              }
+              else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) {
+                hour = '11 am';
+                hour24 = 11;
+              } 
+              else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) {
+                hour = '12 pm';
+                hour24 = 12;
+              } 
+              else {
+                highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
+                hour = `${highHourConverted} pm`;
+                hour24 = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`);
+              }
+            }
+            iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour24);
+            hourlyTemp = Math.round(element.temp_f);
+            hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
+  
+            $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
+          };
+        // }
 
         selectWeatherIcon(data.current.condition.text, data.current.condition.code, hours);
         setTemp(Math.round(data.current.temp_f));
@@ -411,6 +564,9 @@ function App() {
         setVisibility(`${data.current.vis_miles} mi`);
         setPressure(`${data.current.pressure_in} in`);
         setTempUnit('°F');
+
+        $('#fahrenheit-button').css('color', 'white');
+        $('#celsius-button').css('color', 'gray');
 
         tempF.current = Math.round(data.current.temp_f);
         tempC.current = Math.round(data.current.temp_c);
@@ -439,6 +595,136 @@ function App() {
           userTempUnitRef.current = '°C';
         }
 
+        // DAILY FORECAST LOOP
+        for (let i = 0; i < data.forecast.forecastday.length; i++) {
+          let date = new Date(data.forecast.forecastday[i].date_epoch * 1000);
+          let dayNum = date.getUTCDay();
+          let dayOfTheWeek;
+  
+          if (dayNum === 0) dayOfTheWeek = 'Sunday';
+          else if (dayNum === 1) dayOfTheWeek = 'Monday';
+          else if (dayNum === 2) dayOfTheWeek = 'Tuesday';
+          else if (dayNum === 3) dayOfTheWeek = 'Wednesday';
+          else if (dayNum === 4) dayOfTheWeek = 'Thursday';
+          else if (dayNum === 5) dayOfTheWeek = 'Friday';
+          else if (dayNum === 6) dayOfTheWeek = 'Saturday';
+
+          if (i === 0) dayOfTheWeek = 'Today';
+
+          if (i === 0) console.log('dayNum: ', dayNum);
+
+          console.log('dayOfTheWeek: ', dayOfTheWeek);
+  
+          let dateShortened = data.forecast.forecastday[i].date.slice(6, 11);
+  
+          dailyForecastArr.push({ 
+            mintemp_c: data.forecast.forecastday[i].day.mintemp_c,
+            mintemp_f: data.forecast.forecastday[i].day.mintemp_f,
+            maxtemp_c: data.forecast.forecastday[i].day.maxtemp_c,
+            maxtemp_f: data.forecast.forecastday[i].day.maxtemp_f,
+            day: dayOfTheWeek,
+            date: data.forecast.forecastday[i].date,
+            condition_text: data.forecast.forecastday[i].day.condition.text,
+            condition_code: data.forecast.forecastday[i].day.condition.code
+          });
+
+          let iconSource = selectWeatherIcon(data.forecast.forecastday[i].day.condition.text, data.forecast.forecastday[i].day.condition.code, 12);
+
+          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          else $('#daily-forecast-container').append(`<div class='daily-forecast-span gray-border basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+        }
+
+        for (let i = hours + 1; i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
+          const element = data.forecast.forecastday[dayOfForecast].hour[i];
+
+          let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
+
+          timeSplit = element.time.split(' ');
+          if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) {
+              hour = '12 am';
+              hour24 = 0;
+            }
+            else {
+              hour = `${timeSplit[1][1]} am`;
+              hour24 = Number(timeSplit[1][1]);
+            }
+          }
+          else {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) {
+              hour = '10 am';
+              hour24 = 10;
+            }
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) {
+              hour = '11 am';
+              hour24 = 11;
+            } 
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) {
+              hour = '12 pm';
+              hour24 = 12;
+            } 
+            else {
+              highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
+              hour = `${highHourConverted} pm`;
+              hour24 = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`);
+            }
+          }
+          iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour24);
+          hourlyTemp = Math.round(element.temp_f);
+          hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
+
+          console.log('iconSource: ', iconSource);
+          $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
+        };
+
+        let hoursLeft = 24 - (24 - hours - 2);
+
+        if (dayOfForecast === 0) {
+          for (let i = 0; i < hoursLeft; i++) {
+            // console.log('i in second day: ', i);
+  
+            const element = data.forecast.forecastday[dayOfForecast + 1].hour[i];
+  
+            let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
+
+            timeSplit = element.time.split(' ');
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
+              if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) {
+                hour = '12 am';
+                hour24 = 0;
+              }
+              else {
+                hour = `${timeSplit[1][1]} am`;
+                hour24 = Number(timeSplit[1][1]);
+              }
+            }
+            else {
+              if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) {
+                hour = '10 am';
+                hour24 = 10;
+              }
+              else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) {
+                hour = '11 am';
+                hour24 = 11;
+              } 
+              else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) {
+                hour = '12 pm';
+                hour24 = 12;
+              } 
+              else {
+                highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
+                hour = `${highHourConverted} pm`;
+                hour24 = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`);
+              }
+            }
+            iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour24);
+            hourlyTemp = Math.round(element.temp_c);
+            hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
+  
+            $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
+          };
+        }
+        
         setTemp(Math.round(data.current.temp_c));
         setLowTemp(Math.round(data.forecast.forecastday[0].day.mintemp_c));
         setHighTemp(Math.round(data.forecast.forecastday[0].day.maxtemp_c));
@@ -447,6 +733,9 @@ function App() {
         setVisibility(`${data.current.vis_km} km`);
         setPressure(`${data.current.pressure_mb} mb`);
         setTempUnit('°C');
+
+        $('#fahrenheit-button').css('color', 'gray');
+        $('#celsius-button').css('color', 'white');
 
         tempF.current = Math.round(data.current.temp_f);
         tempC.current = Math.round(data.current.temp_c);
@@ -470,7 +759,12 @@ function App() {
           setWindGust(`${data.current.gust_mph} kph`);
         }
       }
-      
+
+      dailyForecastArrRef.current = dailyForecastArr;
+      // console.log('dailyForecastArrRef.current: ', dailyForecastArrRef.current);
+      hourlyForecastArrRef.current = hourlyForecastArr;
+      // console.log('hourlyForecastArr after both for loops: ', hourlyForecastArr);
+
       setLocation(data.location.name);
       setDescription(description);
       setHumidity(data.current.humidity);
@@ -481,11 +775,71 @@ function App() {
 
       $('#wind-direction-icon').css('transform', `rotate(${windDirectionIconRotation}deg)`);
 
-      // const sunriseTime = new Date(data.sys.sunrise);
-      // const sunsetTime = new Date(data.sys.sunset);
+      setSunrise(data.forecast.forecastday[0].astro.sunrise);
+      setSunset(data.forecast.forecastday[0].astro.sunset);
+      
+      setAirQuality(data.current.air_quality['us-epa-index']);
 
-      // setSunrise(sunriseTime.toLocaleTimeString('en-US'));
-      // setSunset(sunsetTime.toLocaleTimeString('en-US'));
+      // Air quality colors: (0, 228, 0), (255, 255, 0), (255, 126, 0), (255, 0, 0), (143, 63, 151), (126, 0, 35)
+      if (data.current.air_quality['us-epa-index'] === 1) {
+        setAirQualityDescription('Good');
+        // $('#air-quality-number').css('border-color', 'rgb(0, 228, 0)');
+        $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(0, 228, 0) 16%, gray 16%)');
+      }
+      else if (data.current.air_quality['us-epa-index'] === 2) {
+        setAirQualityDescription('Moderate');
+        // $('#air-quality-number').css('border-color', 'rgb(255, 255, 0)');
+        $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(255, 255, 0) 33%, gray 33%)');
+      }
+      else if (data.current.air_quality['us-epa-index'] === 3) {
+        setAirQualityDescription('Unhealthy for sensitive groups');
+        // $('#air-quality-number').css('border-color', 'rgb(255, 126, 0)');
+        $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(255, 126, 0) 50%, gray 50%)');
+      } 
+      else if (data.current.air_quality['us-epa-index'] === 4) {
+        setAirQualityDescription('Unhealthy');
+        // $('#air-quality-number').css('border-color', 'rgb(255, 0, 0)');
+        $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(255, 0, 0) 66%, gray 66%)');
+      } 
+      else if (data.current.air_quality['us-epa-index'] === 5) {
+        setAirQualityDescription('Very unhealthy');
+        // $('#air-quality-number').css('border-color', 'rgb(143, 63, 151)');
+        $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(143, 63, 151) 83%, gray 83%)');
+      } 
+      else if (data.current.air_quality['us-epa-index'] === 6) {
+        setAirQualityDescription('Hazardous');
+        // $('#air-quality-number').css('border-color', 'rgb(126, 0, 35)');
+        $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(126, 0, 35) 100%)');
+      }
+
+      setUVIndex(data.current.uv);
+
+      // UV Colors: #299501, #f7e401, #f95a01, #d90111, #6c49c9
+      if (data.current.uv >= 0 && data.current.uv <= 2) {
+        setUVIndexDescription('Low');
+        // $('#uv-number').css('border-color', 'rgb(0, 228, 0)');
+        $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(0, 228, 0) 9%, gray 9%)');
+      } 
+      else if (data.current.uv >= 3 && data.current.uv <= 5) {
+        setUVIndexDescription('Moderate');
+        $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(255, 126, 0) 36%, gray 36%)');
+        // $('#uv-number').css('border-color', 'rgb(255, 126, 0)');
+      } 
+      else if (data.current.uv >= 6 && data.current.uv <= 7) {
+        setUVIndexDescription('High');
+        $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(255, 0, 0) 59%, gray 59%)');
+        // $('#uv-number').css('border-color', 'rgb(255, 0, 0)');
+      }
+      else if (data.current.uv >= 8 && data.current.uv <= 10) {
+        setUVIndexDescription('Very high');
+        $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(143, 63, 151) 82%, gray 82%)');
+        // $('#uv-number').css('border-color', 'rgb(143, 63, 151)');
+      }
+      else if (data.current.uv >= 11) {
+        setUVIndexDescription('Extreme');
+        $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(126, 0, 35)) 100%)');
+        // $('#uv-number').css('border-color', 'rgb(126, 0, 35)');
+      }
 
       closeLocationSearch();
       $('#autocomplete').val('');
@@ -525,6 +879,7 @@ function App() {
     }
     // Cloudy / Overcast
     else if (conditionText === 'Cloudy' || conditionText === 'Overcast') {
+      $('#icon').removeClass('spin-once');
       setWeatherIcon('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-gray.png');
       iconLink = 'https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-gray.png';
     }
@@ -576,30 +931,110 @@ function App() {
     }, 3200);
   }
 
-  function convertTempUnit() {
-    if (tempUnit === '°C') {
-      setTemp(tempF.current);
-      setFeelsLike(feelsLikeF.current);
-      setHighTemp(highTempF.current);
-      setLowTemp(lowTempF.current);
-      setWindSpeed(windSpeedMph.current);
-      setWindGust(windGustMph.current);
-      setVisibility(visibilityMi.current);
-      setPressure(pressureIn.current);
-      setTempUnit('°F');
+  // function convertTempUnit() {
+  //   let hourlyForecastElements, convertedTemp;
+    
+  //   hourlyForecastElements = document.querySelectorAll('.hourly-forecast-temp');
+
+  //   console.log('hourlyForecastElements: ', hourlyForecastElements);
+  //   // console.log('hourlyForecastArrRef.current: ', hourlyForecastArrRef.current);
+
+  //   if (tempUnit === '°C') {
+  //     for (let i = 0; i < hourlyForecastElements.length; i++) {
+  //       hourlyForecastElements[i].innerText = `${Math.round(hourlyForecastArrRef.current[i].f)}°`;
+  //     }
+
+  //     setTemp(tempF.current);
+  //     setFeelsLike(feelsLikeF.current);
+  //     setHighTemp(highTempF.current);
+  //     setLowTemp(lowTempF.current);
+  //     setWindSpeed(windSpeedMph.current);
+  //     setWindGust(windGustMph.current);
+  //     setVisibility(visibilityMi.current);
+  //     setPressure(pressureIn.current);
+  //     setTempUnit('°F');
+  //   }
+  //   else {
+  //     console.log('hourlyForecastArrRef.current: ', hourlyForecastArrRef.current);
+  //     for (let i = 0; i < hourlyForecastElements.length; i++) {
+  //       hourlyForecastElements[i].innerText = `${Math.round(hourlyForecastArrRef.current[i].c)}°`;
+  //     }
+
+  //     setTemp(tempC.current);
+  //     setFeelsLike(feelsLikeC.current);
+  //     setHighTemp(highTempC.current);
+  //     setLowTemp(lowTempC.current);
+  //     setWindSpeed(windSpeedKph.current);
+  //     setWindGust(windGustKph.current);
+  //     setVisibility(visibilityKm.current);
+  //     setPressure(pressureMb.current);
+  //     setTempUnit('°C');
+  //   }
+  // }
+
+  function convertToCelsius() {
+    let hourlyForecastElements, dailyForecastHighElements, dailyForecastLowElements;
+    
+    hourlyForecastElements = document.querySelectorAll('.hourly-forecast-temp');
+    dailyForecastHighElements = document.querySelectorAll('.daily-forecast-high');
+    dailyForecastLowElements = document.querySelectorAll('.daily-forecast-low');
+
+    console.log('hourlyForecastArrRef.current: ', hourlyForecastArrRef.current);
+    for (let i = 0; i < hourlyForecastElements.length; i++) {
+      hourlyForecastElements[i].innerText = `${Math.round(hourlyForecastArrRef.current[i].c)}°`;
     }
-    else {
-      setTemp(tempC.current);
-      setFeelsLike(feelsLikeC.current);
-      setHighTemp(highTempC.current);
-      setLowTemp(lowTempC.current);
-      setWindSpeed(windSpeedKph.current);
-      setWindGust(windGustKph.current);
-      setVisibility(visibilityKm.current);
-      setPressure(pressureMb.current);
-      setTempUnit('°C');
+
+    for (let i = 0; i < dailyForecastHighElements.length; i++) {
+      dailyForecastHighElements[i].innerText = `${Math.round(dailyForecastArrRef.current[i].maxtemp_c)}°`;
+      dailyForecastLowElements[i].innerText = `${Math.round(dailyForecastArrRef.current[i].mintemp_c)}°`;
     }
+
+    $('#fahrenheit-button').css('color', 'gray');
+    $('#celsius-button').css('color', 'white');
+
+    setTemp(tempC.current);
+    setFeelsLike(feelsLikeC.current);
+    setHighTemp(highTempC.current);
+    setLowTemp(lowTempC.current);
+    setWindSpeed(windSpeedKph.current);
+    setWindGust(windGustKph.current);
+    setVisibility(visibilityKm.current);
+    setPressure(pressureMb.current);
+    setTempUnit('°C');
   }
+
+  function convertToFahrenheit() {
+    let hourlyForecastElements, dailyForecastHighElements, dailyForecastLowElements;
+    
+    hourlyForecastElements = document.querySelectorAll('.hourly-forecast-temp');
+    dailyForecastHighElements = document.querySelectorAll('.daily-forecast-high');
+    dailyForecastLowElements = document.querySelectorAll('.daily-forecast-low');
+
+    console.log('hourlyForecastElements: ', hourlyForecastElements);
+    // console.log('hourlyForecastArrRef.current: ', hourlyForecastArrRef.current);
+
+    for (let i = 0; i < hourlyForecastElements.length; i++) {
+      hourlyForecastElements[i].innerText = `${Math.round(hourlyForecastArrRef.current[i].f)}°`;
+    }
+
+    for (let i = 0; i < dailyForecastHighElements.length; i++) {
+      dailyForecastHighElements[i].innerText = `${Math.round(dailyForecastArrRef.current[i].maxtemp_f)}°`;
+      dailyForecastLowElements[i].innerText = `${Math.round(dailyForecastArrRef.current[i].mintemp_f)}°`;
+    }
+
+    $('#fahrenheit-button').css('color', 'white');
+    $('#celsius-button').css('color', 'gray');
+
+    setTemp(tempF.current);
+    setFeelsLike(feelsLikeF.current);
+    setHighTemp(highTempF.current);
+    setLowTemp(lowTempF.current);
+    setWindSpeed(windSpeedMph.current);
+    setWindGust(windGustMph.current);
+    setVisibility(visibilityMi.current);
+    setPressure(pressureIn.current);
+    setTempUnit('°F');
+}
 
   function changeDisplayMode() {
     const displayModeText = document.getElementById('display-mode-text');
@@ -666,8 +1101,8 @@ function App() {
           <input id='autocomplete' name='autocomplete' className='expand' placeholder='Enter a location' type='text'/>
         </div>
       </div>
-      <div className='shadow-2' id='brand-container'>
-        <div className='width' id='brand-container-2'>
+      <div className='shadow-2' id='navbar-container'>
+        <div className='width' id='navbar-container-2'>
           {/* <div id="button-container" className="width">
             <button id="temp-unit-button" className="button-2" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnitButton}</button>
           </div> */}
@@ -678,8 +1113,11 @@ function App() {
             <FontAwesomeIcon id='brand-icon' icon={faTemperatureLow} />
             <h1 id='brand-name'>WeatherHere</h1>
           </div>
-          <span id="display-mode-span" className='text-right'>
-            <button id="temp-unit-button" className="button-2 mr-1" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnit}</button>
+          <span id="temp-unit-span" className='text-right'>
+            {/* <button id="temp-unit-button" className="button-2 mr-1" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnit}</button> */}
+            <button id='fahrenheit-button' className="temp-unit-button button-2" name="change-temperature-unit" onClick={convertToFahrenheit}>°F</button>
+            <span id='temp-unit-pipe' className='pipe-separator'>|</span>
+            <button id='celsius-button' className="temp-unit-button button-2" name="change-temperature-unit" onClick={convertToCelsius}>°C</button>
             {/* <button id="display-mode" aria-label="switch-display-mode" className="" name="switch-display-mode" onClick={changeDisplayMode}>
               <FontAwesomeIcon id="display-mode-icon" icon={faMoon} />
             </button>
@@ -692,83 +1130,146 @@ function App() {
           {/* <div id='location-container' className='basis-full go-up'>
             <div id="location" className="letter-spacing-4 shadow"><span id="location-text" className=''>{location}</span></div>
           </div> */}
-          <div className="App width height go-up-2" id='app'>
-            <div id="weather-loading" className="height"></div>
-            <div id='location-container' className='go-up'>
-              <div id="location" className="letter-spacing-4 shadow"><span id="location-text" className=''>{location}</span></div>
-              <FontAwesomeIcon id="location-icon" icon={faLocationDot} />
-            </div>
-            <div id="weather-info-container">
-              <div id="first-col" className="flex-wrap">
-                <div id="temp-div" className="flex-nowrap">
-                  <div className='temp-child'>
-                    <span id="temp-span" className="line-height" name="temperature">{temp}</span>
-                    <span id="temp-unit" className="line-height">{tempUnit}</span>
+          {/* <div className='flex-wrap width' id='main-info-container'> */}
+            <div className="App width go-up-2" id='app'>
+              <div id="weather-loading" className="height"></div>
+              <div id='location-container' className='go-up'>
+                <div id="location" className="letter-spacing-4 shadow"><span id="location-text" className=''>{location}</span></div>
+                <FontAwesomeIcon id="location-icon" icon={faLocationDot} />
+              </div>
+              <div id="weather-info-container">
+                <div id="first-col" className="flex-wrap">
+                  <div id="temp-div" className="flex-nowrap">
+                    <div className='temp-child'>
+                      <span id="temp-span" className="line-height" name="temperature">{temp}</span>
+                      <span id="temp-unit" className="line-height">{tempUnit}</span>
+                    </div>
+                    <div id='feels-like'><span className=''>Feels like</span> {feelsLike}°</div>
                   </div>
-                  <div id='feels-like'><span className=''>Feels like</span> {feelsLike}°</div>
+                  <div id='high-low'>
+                    <span><span id='high-text' className='font-bold' hidden>High</span> {highTemp}°<span className='pipe-separator'>|</span><span id='low-text' className='font-bold' hidden>Low </span>{lowTemp}°</span>
+                  </div>
                 </div>
-                <div id='high-low'>
-                  <span><span id='high-text' className='font-bold' hidden>High</span> {highTemp}° | <span id='low-text' className='font-bold' hidden>Low</span> {lowTemp}°</span>
-                </div>
-              </div>
-              <div id="second-col" className='flex-wrap'>
-                {/* <div id="icon-div"><FontAwesomeIcon id="icon" icon={weatherIcon} /></div> */}
-                <div id="icon-div"><img id="icon" src={weatherIcon} /></div>
-                <div id="description-div">
-                  <p id="description-text" className='letter-spacing-2'>{description}</p>
+                <div id="second-col" className='flex-wrap'>
+                  {/* <div id="icon-div"><FontAwesomeIcon id="icon" icon={weatherIcon} /></div> */}
+                  <div id="icon-div"><img id="icon" src={weatherIcon} /></div>
+                  <div id="description-div">
+                    <p id="description-text" className='letter-spacing-2'>{description}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className='width extra-info-sections shadow-2' id='hourly-forecast-container'>
-            <div>
-              {/* <p id='hourly-forecast-header' className='extra-info-header letter-spacing-2 basis-full'>Hourly</p> */}
-            </div>
-          </div>
-          <div className='width extra-info-sections shadow-2' id='wind-outer-container'>
-            <div className='basis-full' id='wind-header-container'>
-              <p id='wind-header' className='extra-info-header letter-spacing-2'>Wind</p>
-            </div>
-            <div className='extra-info wind-info' id='wind-speed-container'>
-            <p className='wind-info-header letter-spacing-2'>Speed</p>
-              <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-icon" icon={faWind} />
-              <p className='extra-info-number' id="wind-speed">{windSpeed}</p>
-            </div>
-            <div className='extra-info wind-info' id='wind-direction-container'>
-              <p className='wind-info-header letter-spacing-2'>Direction</p>
-              <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-direction-icon" icon={faLocationArrow} />
-              <p className='extra-info-number' id="wind-direction">{windDirection}</p>
-            </div>
-            <div className='extra-info wind-info' id='wind-gust-container'>
-              <p className='wind-info-header letter-spacing-2'>Gust</p>
-              <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-gust-icon" icon={faArrowUpWideShort} />
-              <p className='extra-info-number' id="wind-gust">{windGust}</p>
-            </div>
-          </div>
-          <div className='extra-info-sections width shadow-2' id='extra-info-section' hidden>
-            <div className='go-down basis-full' id='extra-info-container'>
-              <div id="humidity-container" className='shadow extra-info'>
-                <p id='humidity-header' className='extra-info-header letter-spacing-2'>Humidity</p>
-                <FontAwesomeIcon className='extra-info-icons' id='droplet' icon={faDroplet} />
-                <p className='extra-info-number' id="humidity-number">{humidity}%</p>
-              </div>
-              <div id="visibility-container" className='shadow extra-info'>
-                <p id='visibility-header' className='extra-info-header letter-spacing-2'>Visibility</p>
-                <FontAwesomeIcon className='extra-info-icons gray-text' id="visibility-icon" icon={faEye} />
-                <p className='extra-info-number' id="visibility-number">{visibility}</p>
-              </div>
-              <div id="pressure-container" className='shadow extra-info'>
-                <p id='pressure-header' className='extra-info-header letter-spacing-2'>Pressure</p>
-                <FontAwesomeIcon className='extra-info-icons gray-text' id="wind-icon" icon={faDownLeftAndUpRightToCenter} />
-                <p className='extra-info-number' id="pressure-number">{pressure}</p>
+            <div className='width extra-info-sections shadow-2' id='hourly-forecast-container'>
+              <div>
+                {/* <p id='hourly-forecast-header' className='extra-info-header letter-spacing-2 basis-full'>Hourly</p> */}
               </div>
             </div>
-          </div>
+            <div className='width extra-info-sections shadow-2' id='daily-forecast-container'>
+              {/* Day of the week/date, High/Low, One icon per condition text/code */}
+            </div>
+          {/* </div> */}
+          {/* <div id='current-details-container' className=''> */}
+            <div className='width extra-info-sections shadow-2' id='wind-outer-container'>
+              <div className='basis-full' id='wind-header-container'>
+                <p id='wind-header' className='extra-info-header letter-spacing-2 gray-border'>Wind</p>
+              </div>
+              <div className='extra-info wind-info' id='wind-speed-container'>
+              <p className='wind-info-header letter-spacing-2'>Speed</p>
+                <FontAwesomeIcon className='extra-info-icons' id="wind-icon" icon={faWind} />
+                <p className='extra-info-number' id="wind-speed">{windSpeed}</p>
+              </div>
+              <div className='extra-info wind-info' id='wind-direction-container'>
+                <p className='wind-info-header letter-spacing-2'>Direction</p>
+                <FontAwesomeIcon className='extra-info-icons' id="wind-direction-icon" icon={faLocationArrow} />
+                <p className='extra-info-number' id="wind-direction">{windDirection}</p>
+              </div>
+              <div className='extra-info wind-info' id='wind-gust-container'>
+                <p className='wind-info-header letter-spacing-2'>Gust</p>
+                <FontAwesomeIcon className='extra-info-icons' id="wind-gust-icon" icon={faArrowUpWideShort} />
+                <p className='extra-info-number' id="wind-gust">{windGust}</p>
+              </div>
+            </div>
+            <div className='width extra-info-sections shadow-2' id='sunrise-sunset-container'>
+              <div className='' id='sunrise-sunset-icon-container'>
+              </div>
+              <div id='sunrise-sunset-info' className='basis-full'>
+                <div className='basis-50-header sunset-info-container' id=''>
+                  <p className='letter-spacing-2 font-bold'>Sunrise</p>
+                  <div className='mask'>
+                    <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunrise-1.png' id='sunrise-icon' className='basis-full sunrise-sunset-icon' />
+                  </div>
+                  <p className='letter-spacing-2'>{sunriseTime}</p>
+                  {/* <p className='letter-spacing-2 basis-50-header'>{sunsetTime}</p> */}
+                </div>
+                <div className='basis-50-header sunset-info-container' id=''>
+                  <p className='letter-spacing-2 font-bold'>Sunset</p>
+                  <div className='mask'>
+                    <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunset-1.png' id='sunset-icon' className='basis-full sunrise-sunset-icon' />
+                  </div>
+                  <p className='letter-spacing-2'>{sunsetTime}</p>
+                </div>
+                {/* <div className='basis-full flex-wrap'>
+                  <p className='letter-spacing-2 basis-50-header'>Sunrise</p>
+                  <p className='letter-spacing-2 basis-50-header'>Sunset</p>
+                </div> */}
+              </div>
+            </div>
+            <div className='extra-info-sections width shadow-2' id='extra-info-section' hidden>
+              <div className='go-down basis-full' id='extra-info-container'>
+                <div id="humidity-container" className='shadow extra-info'>
+                  <p id='humidity-header' className='extra-info-header letter-spacing-2'>Humidity</p>
+                  <FontAwesomeIcon className='extra-info-icons' id='droplet' icon={faDroplet} />
+                  <p className='extra-info-number' id="humidity-number">{humidity}%</p>
+                </div>
+                <div id="visibility-container" className='shadow extra-info'>
+                  <p id='visibility-header' className='extra-info-header letter-spacing-2'>Visibility</p>
+                  {/* <FontAwesomeIcon className='extra-info-icons gray-text' id="visibility-icon" icon={faEye} /> */}
+                  <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/eye-solid-edited-1b.png' className='extra-info-icons' id="visibility-icon" />
+                  <p className='extra-info-number' id="visibility-number">{visibility}</p>
+                </div>
+                <div id="pressure-container" className='shadow extra-info'>
+                  <p id='pressure-header' className='extra-info-header letter-spacing-2'>Pressure</p>
+                  <FontAwesomeIcon className='extra-info-icons' id="wind-icon" icon={faDownLeftAndUpRightToCenter} />
+                  <p className='extra-info-number' id="pressure-number">{pressure}</p>
+                </div>
+              </div>
+            </div>
+            <div className='width extra-info-sections shadow-2' id='uv-air-container'>
+              <div className='basis-50-header'>
+                <p className='letter-spacing-2 font-bold'>UV Index</p>
+                <div className='' >
+                  <div id='uv-number-container'>
+                    <p className='uv-air-number' id="uv-number">{uvIndex}</p>
+                  </div>
+                </div>
+                {/* <p className='uv-air-number' id="uv-number">{uvIndex}</p> */}
+                <p className='extra-info-number'>{uvIndexDescription}</p>
+              </div>
+              <div className='basis-50-header'>
+                <p className='letter-spacing-2 font-bold'>Air Quality</p>
+                <div>
+                  <div id='air-quality-number-container'>
+                    <p className='uv-air-number' id="air-quality-number">{airQuality}</p>
+                  </div>
+                </div>
+                <p className='extra-info-number'>{airQualityDescription}</p>
+              </div>
+            </div>
+            {/* <div id='brand-text-container' className=''>
+              <div id='brand-with-copyright'>
+                <span>Copyright © 2023</span>
+                <img id='brand-text' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/weatherapp-brand-text-white-2.png' />
+              </div>
+            </div> */}
+          {/* </div> */}
         </div>
         <div id='brand-text-container' className=''>
           <div id='brand-with-copyright'>
             <span>Copyright © 2023</span>
             <img id='brand-text' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/weatherapp-brand-text-white-2.png' />
+          </div>
+          <div className='basis-full gray-text' id='weather-api-credit'>
+            Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a>
           </div>
         </div>
       </div>
