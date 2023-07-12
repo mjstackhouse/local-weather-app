@@ -775,8 +775,17 @@ function App() {
 
       $('#wind-direction-icon').css('transform', `rotate(${windDirectionIconRotation}deg)`);
 
-      setSunrise(data.forecast.forecastday[0].astro.sunrise);
-      setSunset(data.forecast.forecastday[0].astro.sunset);
+      let sunriseFormatted, sunsetFormatted;
+
+      if (data.forecast.forecastday[0].astro.sunrise[0] === '0') sunriseFormatted = data.forecast.forecastday[0].astro.sunrise.slice(1, 9);
+      else sunriseFormatted = data.forecast.forecastday[0].astro.sunrise;
+
+      setSunrise(sunriseFormatted);
+
+      if (data.forecast.forecastday[0].astro.sunset[0] === '0') sunsetFormatted = data.forecast.forecastday[0].astro.sunset.slice(1, 9);
+      else sunsetFormatted = data.forecast.forecastday[0].astro.sunset;
+
+      setSunset(sunsetFormatted);
       
       setAirQuality(data.current.air_quality['us-epa-index']);
 
@@ -1194,7 +1203,7 @@ function App() {
                 <div className='basis-50-header sunset-info-container' id=''>
                   <p className='letter-spacing-2 font-bold'>Sunrise</p>
                   <div className='mask'>
-                    <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunrise-1.png' id='sunrise-icon' className='basis-full sunrise-sunset-icon' />
+                    <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunrise-2b.png' id='sunrise-icon' className='basis-full sunrise-sunset-icon' />
                   </div>
                   <p className='letter-spacing-2'>{sunriseTime}</p>
                   {/* <p className='letter-spacing-2 basis-50-header'>{sunsetTime}</p> */}
@@ -1202,7 +1211,7 @@ function App() {
                 <div className='basis-50-header sunset-info-container' id=''>
                   <p className='letter-spacing-2 font-bold'>Sunset</p>
                   <div className='mask'>
-                    <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunset-1.png' id='sunset-icon' className='basis-full sunrise-sunset-icon' />
+                    <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunset-2b.png' id='sunset-icon' className='basis-full sunrise-sunset-icon' />
                   </div>
                   <p className='letter-spacing-2'>{sunsetTime}</p>
                 </div>

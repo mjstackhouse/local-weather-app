@@ -690,7 +690,7 @@ button {
 }
 
 .sunrise-sunset-icon {
-  height: 3rem;
+  height: 4rem;
   /* transform: translatey(1rem); */
   /* width: 100%; */
   /* margin-bottom: -1rem; */
@@ -715,11 +715,13 @@ button {
 @keyframes sunrise {
   0% { transform: translatey(4rem); opacity: 0%; }
   50% { transform: translatey(0rem); opacity: 100%; }
-  100% { transform: translatey(0rem); }
+  90% { opacity: 100%; }
+  100% { transform: translatey(0rem); opacity: 0%; }
 }
 
 @keyframes sunset {
-  0% { transform: translatey(0rem);  }
+  0% { transform: translatey(0rem); opacity: 0%; }
+  10% { opacity: 100%; }
   50% { transform: translatey(0rem); opacity: 100%; }
   100% { transform: translatey(4rem); opacity: 0%; }
 }
