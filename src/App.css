@@ -699,15 +699,26 @@ button {
 }
 
 #sunrise-icon {
+  transform: translatey(4rem);
+  opacity: 0%;
+}
+
+#sunset-icon {
+  /* transform: translatey(-4rem); */
+  opacity: 100%;
+  /* transition: opacity 1s ease; */
+}
+
+.sunrise-animation {
   animation-name: sunrise;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
   animation-timing-function: ease;
   animation-duration: 4s;
 }
 
-#sunset-icon {
+.sunset-animation {
   animation-name: sunset;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
   animation-timing-function: ease;
   animation-duration: 4s;
 }
@@ -715,13 +726,11 @@ button {
 @keyframes sunrise {
   0% { transform: translatey(4rem); opacity: 0%; }
   50% { transform: translatey(0rem); opacity: 100%; }
-  90% { opacity: 100%; }
-  100% { transform: translatey(0rem); opacity: 0%; }
+  100% { transform: translatey(0rem); opacity: 100%; }
 }
 
 @keyframes sunset {
-  0% { transform: translatey(0rem); opacity: 0%; }
-  10% { opacity: 100%; }
+  0% { transform: translatey(0rem); opacity: 100%; }
   50% { transform: translatey(0rem); opacity: 100%; }
   100% { transform: translatey(4rem); opacity: 0%; }
 }
