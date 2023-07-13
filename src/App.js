@@ -133,8 +133,6 @@ function App() {
     $('#sunrise-icon').css('opacity', '0%');
 
     window.addEventListener('load', () => {
-      console.log('window event listener added');
-
       let observer, sunriseSunsetContainer;
   
       observer = new IntersectionObserver(() => {
@@ -145,8 +143,6 @@ function App() {
 
         if (useEffectCountRef.current > 2) {
           setTimeout(() => {
-            console.log('useEffectCountRef.current: ', useEffectCountRef.current);
-            console.log('setTimeout callback called');
             $('#sunrise-icon').css('transform', 'translatey(0)');
             $('#sunrise-icon').css('opacity', '100%');
             $('#sunset-icon').css('transform', 'translatey(0)');
@@ -284,150 +280,18 @@ function App() {
 
 
   async function fetchAndDisplayWeather(hours) {
-    $('#app').addClass('height');
-    $('.App').css('margin-bottom', '1.5rem');
-
     if (locationRetrieved.current === true) {
-      if (hours >= 21 || (hours >= 0 && hours < 6)) {
-        $('#app').css('color', 'white');
-        $('#app').addClass('shadow-2');
-        
-        $('#brand-text-container').css('background-color', '#1F1F1F');
-        $('#location-search-div').css('background-color', '#1F1F1F');
-        $('#navbar-container').css('background-color', '#1F1F1F');
-        $('.uv-air-number').css('background-color', '#1F1F1F');
-        // $('#extra-info-section').css('background-color', '#1F1F1F');
-        // $('#wind-outer-container').css('background-color', '#1F1F1F');
-        // $('#hourly-forecast-container').css('background-color', '#1F1F1F');
-        // $('#daily-forecast-container').css('background-color', '#1F1F1F');
-        $('.extra-info-sections').css('background-color', '#1F1F1F');
-
-        // $('#icon').css('filter', 'brightness(1)');
-
-        $('#app').css('background-color', '#024d89');
-        
-        $('#root').css('background-color', 'transparent');
-        clearTimeout(timeoutId);
-        $('#weather-loading').css('display', 'none');
-        $('#weather-loading').removeClass('height');
-        
-        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1-landscape-2.jpg")');
-        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1.jpg")');
-      }
-      else if (hours >= 6 && hours < 10) {
-        $('#app').css('background-color', 'transparent');
-        // $('#wind-outer-container').css('background-color', 'transparent');
-        $('#app').css('color', 'black');
-        $('#app').removeClass('shadow-2');
-
-        $('#brand-text-container').css('background-color', 'black');
-        $('#location-search-div').css('background-color', 'black');
-        $('#navbar-container').css('background-color', 'black');
-        $('.uv-air-number').css('background-color', 'black');
-        // $('#extra-info-section').css('background-color', 'black');
-        // $('#wind-outer-container').css('background-color', 'black');
-        // $('#hourly-forecast-container').css('background-color', 'black');
-        // $('#daily-forecast-container').css('background-color', 'black');
-        $('.extra-info-sections').css('background-color', 'black');
-
-        // $('#icon').css('filter', 'brightness(0)');
-        
-        $('#root').css('background-color', 'transparent');
-        clearTimeout(timeoutId);
-        $('#weather-loading').css('display', 'none');
-        $('#weather-loading').removeClass('height');
-
-        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-dusk-1-landscape-2.jpg")');
-        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-dusk-1.jpg")');
-      }
-      else if (hours >= 10 && hours < 18) {
-        $('#app').css('color', 'black');
-        $('#app').addClass('shadow-2');
-
-        $('#brand-text-container').css('background-color', 'black');
-        $('#location-search-div').css('background-color', 'black');
-        $('#navbar-container').css('background-color', 'black');
-        $('.uv-air-number').css('background-color', 'black');
-        // $('#extra-info-section').css('background-color', 'black');
-        // $('#wind-outer-container').css('background-color', 'black');
-        // $('#hourly-forecast-container').css('background-color', 'black');
-        // $('#daily-forecast-container').css('background-color', 'black');
-        $('.extra-info-sections').css('background-color', 'black');
-
-        // $('#icon').css('filter', 'brightness(0)');
-
-        $('#app').css('background-color', '#45c7f3');
-        // $('#wind-outer-container').css('background-color', '#024d89');
-        $('#root').css('background-color', 'transparent');
-        clearTimeout(timeoutId);
-        $('#weather-loading').css('display', 'none');
-        $('#weather-loading').removeClass('height');
-
-        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-1-landscape.jpg")');
-        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-1.jpg")');
-      }
-      else if (hours >= 18 && hours < 21) {
-        $('#app').css('background-color', 'transparent');
-        // $('#wind-outer-container').css('background-color', 'transparent');
-        $('#app').css('color', 'black');
-        $('#app').removeClass('shadow-2');
-
-        $('#brand-text-container').css('background-color', 'black');
-        $('#location-search-div').css('background-color', 'black');
-        $('#navbar-container').css('background-color', 'black');
-        $('.uv-air-number').css('background-color', 'black');
-        // $('#extra-info-section').css('background-color', 'black');
-        // $('#wind-outer-container').css('background-color', 'black');
-        // $('#hourly-forecast-container').css('background-color', 'black');
-        // $('#daily-forecast-container').css('background-color', 'black');
-        $('.extra-info-sections').css('background-color', 'black');
-
-        // $('#icon').css('filter', 'brightness(0)');
-
-        $('#brand-text-container').css('background-color', 'black');
-        $('#root').css('background-color', 'transparent');
-        clearTimeout(timeoutId);
-        $('#weather-loading').css('display', 'none');
-        $('#weather-loading').removeClass('height');
-
-        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunset-1-landscape.jpg")');
-        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunset-1.jpg")');
-      }
-
-      // const locationQuery = `lon=${latAndLong[1]}&lat=${latAndLong[0]}`;
       const locationQuery = `${latAndLong[0]},${latAndLong[1]}`;
-      // const currentResponse = await fetch(CURRENT_API + locationQuery);
-      // const forecastResponse = await fetch(FORECAST_API + locationQuery);
       const response = await fetch(FORECAST_API + locationQuery);
       data = await response.json();
 
       apiCallsCountRef.current = apiCallsCountRef.current + 1;
 
-      // currentData = await currentResponse.json();
-      // forecastData = await forecastResponse.json();
-
-      // console.log('currentData: ', currentData);
-      // console.log('forecastData: ', forecastData);
       console.log('data: ', data);
-
-      // data.forecast.forecastday[0].hour[0].time or data.forecast.forecastday[0].hour[0].time_epoch
-      // data.forecast.forecastday[0].hour[0].condition.code to display icon
-      // data.forecast.forecastday[0].hour[0].temp_c
-      // data.forecast.forecastday[0].hour[0].temp_f
-      // data.forecast.forecastday[0].hour[0].chance_of_rain
 
       // Current weather icon
       console.log('data.current.condition.text: ', data.current.condition.text);
       setHourlyForecastOne(data.forecast.forecastday);
-      
-      $('#weather-info-container').css('display', 'grid');
-      $('#location-container').css('display', 'flex');
-      // $('#extra-info-section').css('display', 'flex');
-      // $('#wind-outer-container').css('display', 'flex');
-      // $('#hourly-forecast-container').css('display', 'flex');
-      // $('#daily-forecast-container').css('display', 'flex');
-      $('#sunrise-sunset-container').css('display', 'flex');
-      $('.extra-info-sections').css('display', 'flex');
 
       const description = data.current.condition.text;
       const descriptionSplit = description.split(' ');
@@ -453,9 +317,7 @@ function App() {
       else {
         dayOfForecast = 0;
         newHours = hours + 1;
-      } 
-
-      // console.log('hours: ', hours);
+      }
 
       if ((userTempUnitRef.current === '°F' && userLocationPermissionRef.current === 'granted') || FAHRENHEIT_COUNTRIES.indexOf(data.location.country) !== -1) {
         if (apiCallsCountRef.current === 1) {
@@ -501,20 +363,10 @@ function App() {
 
           if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
           else $('#daily-forecast-container').append(`<div class='daily-forecast-span gray-border basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
-          
-          // if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span basis-full'><span class='basis-33 text-left'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
-          // else $('#daily-forecast-container').append(`<div class='daily-forecast-span gray-border basis-full'><span class='basis-33 text-left'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high font-bold'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low font-bold'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
         }
-  
-        console.log('data.forecast.forecastday[dayOfForecast].hour: ', data.forecast.forecastday[dayOfForecast].hour);
-
-        console.log('hours: ', hours);
 
         // HOURLY FORECAST LOOP 1
         for (let i = newHours; i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
-          console.log('i: ', i);
-          // console.log('data.forecast.forecastday[0].hour[i]: ', data.forecast.forecastday[0].hour[i]);
-
           const element = data.forecast.forecastday[dayOfForecast].hour[i];
 
           let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
@@ -549,12 +401,10 @@ function App() {
               hour24 = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`);
             }
           }
-          console.log('hour in first fahrenheit for loop: ', hour);
           iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour24);
           hourlyTemp = Math.round(element.temp_f);
           hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
 
-          console.log('iconSource: ', iconSource);
           $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
         };
 
@@ -563,56 +413,50 @@ function App() {
         if (hours === 23) hoursLeft = 1;
         else hoursLeft = 24 - (24 - hours - 2);
 
-        console.log('hoursLeft: ', hoursLeft);
-
         // HOURLY FORECAST LOOP 2
-        // if (dayOfForecast === 0) {
-          for (let i = 0; i < hoursLeft; i++) {
-            // console.log('i in second day: ', i);
-  
-            const element = data.forecast.forecastday[dayOfForecast + 1].hour[i];
-  
-            let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
+        for (let i = 0; i < hoursLeft; i++) {
 
-            console.log('element: ', element);
-            timeSplit = element.time.split(' ');
+          const element = data.forecast.forecastday[dayOfForecast + 1].hour[i];
 
-            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
-              if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) {
-                hour = '12 am';
-                hour24 = 0;
-              }
-              else {
-                hour = `${timeSplit[1][1]} am`;
-                hour24 = Number(timeSplit[1][1]);
-              }
+          let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
+
+          timeSplit = element.time.split(' ');
+
+          if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) {
+              hour = '12 am';
+              hour24 = 0;
             }
             else {
-              if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) {
-                hour = '10 am';
-                hour24 = 10;
-              }
-              else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) {
-                hour = '11 am';
-                hour24 = 11;
-              } 
-              else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) {
-                hour = '12 pm';
-                hour24 = 12;
-              } 
-              else {
-                highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
-                hour = `${highHourConverted} pm`;
-                hour24 = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`);
-              }
+              hour = `${timeSplit[1][1]} am`;
+              hour24 = Number(timeSplit[1][1]);
             }
-            iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour24);
-            hourlyTemp = Math.round(element.temp_f);
-            hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
-  
-            $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
-          };
-        // }
+          }
+          else {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) {
+              hour = '10 am';
+              hour24 = 10;
+            }
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) {
+              hour = '11 am';
+              hour24 = 11;
+            } 
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) {
+              hour = '12 pm';
+              hour24 = 12;
+            } 
+            else {
+              highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
+              hour = `${highHourConverted} pm`;
+              hour24 = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`);
+            }
+          }
+          iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour24);
+          hourlyTemp = Math.round(element.temp_f);
+          hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
+
+          $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
+        };
 
         selectWeatherIcon(data.current.condition.text, data.current.condition.code, hours);
         setTemp(Math.round(data.current.temp_f));
@@ -732,57 +576,56 @@ function App() {
           hourlyTemp = Math.round(element.temp_f);
           hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
 
-          console.log('iconSource: ', iconSource);
           $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
         };
 
-        let hoursLeft = 24 - (24 - hours - 2);
+        let hoursLeft;
+        
+        if (hours === 23) hoursLeft = 1;
+        else hoursLeft = 24 - (24 - hours - 2);
 
-        if (dayOfForecast === 0) {
-          for (let i = 0; i < hoursLeft; i++) {
-            // console.log('i in second day: ', i);
-  
-            const element = data.forecast.forecastday[dayOfForecast + 1].hour[i];
-  
-            let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
+        for (let i = 0; i < hoursLeft; i++) {
 
-            timeSplit = element.time.split(' ');
-            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
-              if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) {
-                hour = '12 am';
-                hour24 = 0;
-              }
-              else {
-                hour = `${timeSplit[1][1]} am`;
-                hour24 = Number(timeSplit[1][1]);
-              }
+          const element = data.forecast.forecastday[dayOfForecast + 1].hour[i];
+
+          let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
+
+          timeSplit = element.time.split(' ');
+          if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) {
+              hour = '12 am';
+              hour24 = 0;
             }
             else {
-              if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) {
-                hour = '10 am';
-                hour24 = 10;
-              }
-              else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) {
-                hour = '11 am';
-                hour24 = 11;
-              } 
-              else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) {
-                hour = '12 pm';
-                hour24 = 12;
-              } 
-              else {
-                highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
-                hour = `${highHourConverted} pm`;
-                hour24 = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`);
-              }
+              hour = `${timeSplit[1][1]} am`;
+              hour24 = Number(timeSplit[1][1]);
             }
-            iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour24);
-            hourlyTemp = Math.round(element.temp_c);
-            hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
-  
-            $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
-          };
-        }
+          }
+          else {
+            if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 10) {
+              hour = '10 am';
+              hour24 = 10;
+            }
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 11) {
+              hour = '11 am';
+              hour24 = 11;
+            } 
+            else if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 12) {
+              hour = '12 pm';
+              hour24 = 12;
+            } 
+            else {
+              highHourConverted = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) - 12;
+              hour = `${highHourConverted} pm`;
+              hour24 = Number(`${timeSplit[1][0]}${timeSplit[1][1]}`);
+            }
+          }
+          iconSource = selectWeatherIcon(element.condition.text, element.condition.code, hour24);
+          hourlyTemp = Math.round(element.temp_c);
+          hourlyForecastArr.push({ c: element.temp_c, f: element.temp_f });
+
+          $('#hourly-forecast-container').append(`<span class='hourly-forecast-span'><div class='hourly-forecast-hour'>${hour}</div><img src=${iconSource} class='hourly-forecast-icon' /><div class='hourly-forecast-temp'>${hourlyTemp}°</div></span>`);
+        };
         
         setTemp(Math.round(data.current.temp_c));
         setLowTemp(Math.round(data.forecast.forecastday[0].day.mintemp_c));
@@ -820,9 +663,7 @@ function App() {
       }
 
       dailyForecastArrRef.current = dailyForecastArr;
-      // console.log('dailyForecastArrRef.current: ', dailyForecastArrRef.current);
       hourlyForecastArrRef.current = hourlyForecastArr;
-      // console.log('hourlyForecastArr after both for loops: ', hourlyForecastArr);
 
       setLocation(data.location.name);
       setDescription(description);
@@ -851,32 +692,26 @@ function App() {
       // Air quality colors: (0, 228, 0), (255, 255, 0), (255, 126, 0), (255, 0, 0), (143, 63, 151), (126, 0, 35)
       if (data.current.air_quality['us-epa-index'] === 1) {
         setAirQualityDescription('Good');
-        // $('#air-quality-number').css('border-color', 'rgb(0, 228, 0)');
         $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(0, 228, 0) 16%, gray 16%)');
       }
       else if (data.current.air_quality['us-epa-index'] === 2) {
         setAirQualityDescription('Moderate');
-        // $('#air-quality-number').css('border-color', 'rgb(255, 255, 0)');
         $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(255, 255, 0) 33%, gray 33%)');
       }
       else if (data.current.air_quality['us-epa-index'] === 3) {
         setAirQualityDescription('Unhealthy for sensitive groups');
-        // $('#air-quality-number').css('border-color', 'rgb(255, 126, 0)');
         $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(255, 126, 0) 50%, gray 50%)');
       } 
       else if (data.current.air_quality['us-epa-index'] === 4) {
         setAirQualityDescription('Unhealthy');
-        // $('#air-quality-number').css('border-color', 'rgb(255, 0, 0)');
         $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(255, 0, 0) 66%, gray 66%)');
       } 
       else if (data.current.air_quality['us-epa-index'] === 5) {
         setAirQualityDescription('Very unhealthy');
-        // $('#air-quality-number').css('border-color', 'rgb(143, 63, 151)');
         $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(143, 63, 151) 83%, gray 83%)');
       } 
       else if (data.current.air_quality['us-epa-index'] === 6) {
         setAirQualityDescription('Hazardous');
-        // $('#air-quality-number').css('border-color', 'rgb(126, 0, 35)');
         $('#air-quality-number-container').css('background', 'linear-gradient(0deg, rgb(126, 0, 35) 100%)');
       }
 
@@ -885,29 +720,105 @@ function App() {
       // UV Colors: #299501, #f7e401, #f95a01, #d90111, #6c49c9
       if (data.current.uv >= 0 && data.current.uv <= 2) {
         setUVIndexDescription('Low');
-        // $('#uv-number').css('border-color', 'rgb(0, 228, 0)');
         $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(0, 228, 0) 9%, gray 9%)');
       } 
       else if (data.current.uv >= 3 && data.current.uv <= 5) {
         setUVIndexDescription('Moderate');
         $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(255, 126, 0) 36%, gray 36%)');
-        // $('#uv-number').css('border-color', 'rgb(255, 126, 0)');
       } 
       else if (data.current.uv >= 6 && data.current.uv <= 7) {
         setUVIndexDescription('High');
         $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(255, 0, 0) 59%, gray 59%)');
-        // $('#uv-number').css('border-color', 'rgb(255, 0, 0)');
       }
       else if (data.current.uv >= 8 && data.current.uv <= 10) {
         setUVIndexDescription('Very high');
         $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(143, 63, 151) 82%, gray 82%)');
-        // $('#uv-number').css('border-color', 'rgb(143, 63, 151)');
       }
       else if (data.current.uv >= 11) {
         setUVIndexDescription('Extreme');
         $('#uv-number-container').css('background', 'linear-gradient(0deg, rgb(126, 0, 35)) 100%)');
-        // $('#uv-number').css('border-color', 'rgb(126, 0, 35)');
       }
+
+      if (hours >= 21 || (hours >= 0 && hours < 6)) {
+        $('#app').css('color', 'white');
+        $('#app').addClass('shadow-2');
+        
+        $('#brand-text-container').css('background-color', '#1F1F1F');
+        $('#location-search-div').css('background-color', '#1F1F1F');
+        $('#navbar-container').css('background-color', '#1F1F1F');
+        $('.uv-air-number').css('background-color', '#1F1F1F');
+        $('.extra-info-sections').css('background-color', '#1F1F1F');
+
+        $('#app').css('background-color', '#024d89');
+        
+        $('#root').css('background-color', 'transparent');
+        clearTimeout(timeoutId);
+        
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1-landscape-2.jpg")');
+        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1.jpg")');
+      }
+      else if (hours >= 6 && hours < 10) {
+        console.log('between 6 and 10');
+        $('#app').css('background-color', 'transparent');
+        $('#app').css('color', 'black');
+        $('#app').removeClass('shadow-2');
+
+        $('#brand-text-container').css('background-color', 'black');
+        $('#location-search-div').css('background-color', 'black');
+        $('#navbar-container').css('background-color', 'black');
+        $('.uv-air-number').css('background-color', 'black');
+        
+        $('#root').css('background-color', 'transparent');
+        clearTimeout(timeoutId);
+
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-dusk-1-landscape-2.jpg")');
+        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-dusk-1.jpg")');
+      }
+      else if (hours >= 10 && hours < 18) {
+        $('#app').css('color', 'black');
+        $('#app').addClass('shadow-2');
+
+        $('#brand-text-container').css('background-color', 'black');
+        $('#location-search-div').css('background-color', 'black');
+        $('#navbar-container').css('background-color', 'black');
+        $('.uv-air-number').css('background-color', 'black');
+        $('.extra-info-sections').css('background-color', 'black');
+
+        $('#app').css('background-color', '#45c7f3');
+        $('#root').css('background-color', 'transparent');
+        clearTimeout(timeoutId);
+
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-1-landscape.jpg")');
+        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-1.jpg")');
+      }
+      else if (hours >= 18 && hours < 21) {
+        $('#app').css('background-color', 'transparent');
+        $('#app').css('color', 'black');
+        $('#app').removeClass('shadow-2');
+
+        $('#brand-text-container').css('background-color', 'black');
+        $('#location-search-div').css('background-color', 'black');
+        $('#navbar-container').css('background-color', 'black');
+        $('.uv-air-number').css('background-color', 'black');
+        $('.extra-info-sections').css('background-color', 'black');
+
+        $('#brand-text-container').css('background-color', 'black');
+        $('#root').css('background-color', 'transparent');
+        clearTimeout(timeoutId);
+
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunset-1-landscape.jpg")');
+        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-sunset-1.jpg")');
+      }
+
+      $('#weather-loading').css('display', 'none');
+      $('#weather-loading').removeClass('height');
+      
+      $('#app').addClass('height');
+      $('#app').css('margin-bottom', '1.5rem');
+      $('#weather-info-container').css('display', 'grid');
+      $('#location-container').css('display', 'flex');
+      $('#sunrise-sunset-container').css('display', 'flex');
+      $('.extra-info-sections').css('display', 'flex');
 
       closeLocationSearch();
       $('#autocomplete').val('');
@@ -998,47 +909,6 @@ function App() {
       tempLoadingDiv.innerText = `${text}...`;
     }, 3200);
   }
-
-  // function convertTempUnit() {
-  //   let hourlyForecastElements, convertedTemp;
-    
-  //   hourlyForecastElements = document.querySelectorAll('.hourly-forecast-temp');
-
-  //   console.log('hourlyForecastElements: ', hourlyForecastElements);
-  //   // console.log('hourlyForecastArrRef.current: ', hourlyForecastArrRef.current);
-
-  //   if (tempUnit === '°C') {
-  //     for (let i = 0; i < hourlyForecastElements.length; i++) {
-  //       hourlyForecastElements[i].innerText = `${Math.round(hourlyForecastArrRef.current[i].f)}°`;
-  //     }
-
-  //     setTemp(tempF.current);
-  //     setFeelsLike(feelsLikeF.current);
-  //     setHighTemp(highTempF.current);
-  //     setLowTemp(lowTempF.current);
-  //     setWindSpeed(windSpeedMph.current);
-  //     setWindGust(windGustMph.current);
-  //     setVisibility(visibilityMi.current);
-  //     setPressure(pressureIn.current);
-  //     setTempUnit('°F');
-  //   }
-  //   else {
-  //     console.log('hourlyForecastArrRef.current: ', hourlyForecastArrRef.current);
-  //     for (let i = 0; i < hourlyForecastElements.length; i++) {
-  //       hourlyForecastElements[i].innerText = `${Math.round(hourlyForecastArrRef.current[i].c)}°`;
-  //     }
-
-  //     setTemp(tempC.current);
-  //     setFeelsLike(feelsLikeC.current);
-  //     setHighTemp(highTempC.current);
-  //     setLowTemp(lowTempC.current);
-  //     setWindSpeed(windSpeedKph.current);
-  //     setWindGust(windGustKph.current);
-  //     setVisibility(visibilityKm.current);
-  //     setPressure(pressureMb.current);
-  //     setTempUnit('°C');
-  //   }
-  // }
 
   function convertToCelsius() {
     let hourlyForecastElements, dailyForecastHighElements, dailyForecastLowElements;
