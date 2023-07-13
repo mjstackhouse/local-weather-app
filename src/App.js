@@ -22,6 +22,8 @@ function App() {
   const SNOW_CODES = [1066, 1069, 1114, 1117, 1204, 1207, 1210, 1213, 1216, 1219, 1222, 1225, 1237, 1249, 1252, 1255, 1258, 1261, 1264];
   const RAIN_CODES = [1063, 1072, 1150, 1153, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1240, 1243, 1246];
   const THUNDER_CODES = [1087, 1273, 1276, 1279, 1282];
+
+  const useEffectCountRef = useRef(0);
   
   // Current
   const [tempUnit, setTempUnit] = useState(null);
@@ -101,8 +103,65 @@ function App() {
   let customLocation;
   let timezoneOffset;
   let timeoutId;
+
+  // $('#sunrise-icon').removeClass('sunrise-animation');
+  // $('#sunset-icon').removeClass('sunset-animation');
+
+  // window.addEventListener('load', (event) => {
+  //   let observer, sunriseSunsetContainer;
+
+  //   observer = new IntersectionObserver(() => {
+  //     $('#sunrise-icon').addClass('sunrise-animation');
+  //     $('#sunset-icon').addClass('sunset-animation');
+  //   }, { 
+  //         root: null,
+  //         rootMargin: '0px',
+  //         threshold: 1.0
+  //       });
+    
+  //   sunriseSunsetContainer = document.getElementById('sunrise-sunset-container');
+
+  //   sunriseSunsetContainer.addEventListener('load', () => {
+  //     observer.observe(sunriseSunsetContainer);
+  //   })
+  // })
   
   useEffect(() => {
+    $('#sunrise-icon').removeClass('sunrise-animation');
+    $('#sunset-icon').removeClass('sunset-animation');
+    $('#sunrise-icon').css('transform', 'translatey(4rem)');
+    $('#sunrise-icon').css('opacity', '0%');
+
+    window.addEventListener('load', () => {
+      console.log('window event listener added');
+
+      let observer, sunriseSunsetContainer;
+  
+      observer = new IntersectionObserver(() => {
+        $('#sunrise-icon').addClass('sunrise-animation');
+        $('#sunset-icon').addClass('sunset-animation');
+
+        useEffectCountRef.current = useEffectCountRef.current + 1;
+
+        if (useEffectCountRef.current > 2) {
+          setTimeout(() => {
+            console.log('useEffectCountRef.current: ', useEffectCountRef.current);
+            console.log('setTimeout callback called');
+            $('#sunrise-icon').css('transform', 'translatey(0)');
+            $('#sunrise-icon').css('opacity', '100%');
+            $('#sunset-icon').css('transform', 'translatey(0)');
+            $('#sunset-icon').css('opacity', '100%');
+          }, 4000);
+        }}, { 
+              root: null,
+              rootMargin: '0px',
+              threshold: 1.0
+            });
+      
+      sunriseSunsetContainer = document.getElementById('sunrise-sunset-container');
+      observer.observe(sunriseSunsetContainer);
+    })
+
     if (apiLoaded === false) {
       (async function loadAuto() {
         const script = document.createElement('script');
