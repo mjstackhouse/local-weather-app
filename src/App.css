@@ -355,7 +355,7 @@ button {
 }
 
 .button-2 {
-  color: white;
+  color: gray;
   /* font-size: 1.75rem; */
   background-color: transparent;
   /* background: linear-gradient(270deg, #1F1F1F, #292929); */
@@ -548,8 +548,8 @@ button {
   right: 0;
   bottom: 0;
   /* background-color: black; */
-  /* background-color: #1F1F1F; */
-  background-color: #024d89;
+  background-color: #1F1F1F;
+  /* background-color: #024d89; */
   /* background-image: url('https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-nightsky-1.jpg'); */
   /* opacity: 98%; */
   /* background-image: radial-gradient(circle at center, #6E7B81 2.5%, #4D565B 75%, #3F474A 100%); */
