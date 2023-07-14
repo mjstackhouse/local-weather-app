@@ -704,6 +704,7 @@ function App() {
         $('#location-search-div').css('background-color', 'black');
         $('#navbar-container').css('background-color', 'black');
         $('.uv-air-number').css('background-color', 'black');
+        $('.extra-info-sections').css('background-color', 'black');
         
         $('#root').css('background-color', 'transparent');
         clearTimeout(timeoutId);
