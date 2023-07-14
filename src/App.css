@@ -287,7 +287,7 @@ a:visited {
 }
 
 #autocomplete {
-  width: 260px;
+  max-width: 260px;
   height: 2rem;
   margin: 4rem auto;
   border-radius: 1.5rem;
@@ -532,30 +532,6 @@ a:visited {
 
 /* ANIMATIONS */
 
-.collapse {
-  animation-name: collapse;
-  animation-iteration-count: 1;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-in;
-}
-
-@keyframes collapse {
-  0% { width: 325px; opacity: 100%; }
-  100% { width: 0px; opacity: 0%; }
-}
-
-.expand {
-  animation-name: expand;
-  animation-iteration-count: 1;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-in;
-}
-
-@keyframes expand {
-  0% { width: 0px; opacity: 0%; }
-  100% { width: 300px; opacity: 100%; }
-}
-
 .spin-once {
   animation-name: spin-once;
   animation-iteration-count: 1;
@@ -620,7 +596,7 @@ a:visited {
     display: inline;
   }
   #autocomplete {
-    width: 315px;
+    max-width: 315px;
   }
 }
 
@@ -641,7 +617,7 @@ a:visited {
     display: inline;
   }
   #autocomplete {
-    width: 340px;
+    max-width: 340px;
   }
 }
 
@@ -669,7 +645,7 @@ a:visited {
     height: 300px;
   }
   #autocomplete {
-    width: 85vw;
+    /* width: 85vw; */
     max-width: 675px;
   }
   #temp-unit-button, #display-mode {

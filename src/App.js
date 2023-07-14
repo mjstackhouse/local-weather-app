@@ -914,14 +914,14 @@ function App() {
 
   function openLocationSearch() {
     $('#invalid-location-feedback').text('');
-    $('#autocomplete').addClass('expand');
+    $('#autocomplete').animate({ width: '100%'}, 750);
     $('#location-search-div').css('display', 'flex');
     $('#location-search-div').css('flex-direction', 'column');
     $('html').css('overflow-y', 'hidden');
   }
 
   function closeLocationSearch() {
-    $('#autocomplete').removeClass('expand');
+    $('#autocomplete').css('width', '0%');
     $('#location-search-div').css('display', 'none');
     $('html').css('overflow-y', 'visible');
   }
