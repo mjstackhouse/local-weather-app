@@ -22,8 +22,6 @@ function App() {
   const SNOW_CODES = [1066, 1069, 1114, 1117, 1204, 1207, 1210, 1213, 1216, 1219, 1222, 1225, 1237, 1249, 1252, 1255, 1258, 1261, 1264];
   const RAIN_CODES = [1063, 1072, 1150, 1153, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1240, 1243, 1246];
   const THUNDER_CODES = [1087, 1273, 1276, 1279, 1282];
-
-  const useEffectCountRef = useRef(0);
   
   // Current
   const [tempUnit, setTempUnit] = useState(null);
@@ -51,14 +49,11 @@ function App() {
   const [airQuality, setAirQuality] = useState(null);
   const [airQualityDescription, setAirQualityDescription] = useState(null);
   const [pressure, setPressure] = useState(null);
-  const [displayMode, setDisplayMode] = useState('dark');
 
   // Hourly Forecast
   const [hourlyForecastOne, setHourlyForecastOne] = useState(null);
 
-  // 3 Day Forecast
-
-
+  // Ref Variables
   const userTempUnitRef = useRef(null);
   const userLocationPermissionRef = useRef(null);
   const apiCallsCountRef = useRef(0);
@@ -85,78 +80,16 @@ function App() {
   const dailyForecastArrRef = useRef([]);
   let dailyForecastArr;
 
-  const weatherLoadingDiv = document.getElementById('weather-loading');
-  const newWeatherLoadingInput = document.getElementById('autocomplete');
-  const locationDiv = document.getElementById('location-container');
-  const weatherInfoContainer = document.getElementById('weather-info-container');
-  // const api = 'https://weather-proxy.freecodecamp.rocks/api/current?';
-  // const CURRENT_API = `http://api.weatherapi.com/v1/current.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&q=`;
   const FORECAST_API = `https://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&days=3&alerts=yes&aqi=yes&q=`;
   
-  // let locationRetrieved = false;
   let latAndLong = [];
   let data;
-  // let currentData;
-  // let forecastData;
-  let fccWeatherIcon;
   let autocomplete;
   let customLocation;
   let timezoneOffset;
   let timeoutId;
-
-  // $('#sunrise-icon').removeClass('sunrise-animation');
-  // $('#sunset-icon').removeClass('sunset-animation');
-
-  // window.addEventListener('load', (event) => {
-  //   let observer, sunriseSunsetContainer;
-
-  //   observer = new IntersectionObserver(() => {
-  //     $('#sunrise-icon').addClass('sunrise-animation');
-  //     $('#sunset-icon').addClass('sunset-animation');
-  //   }, { 
-  //         root: null,
-  //         rootMargin: '0px',
-  //         threshold: 1.0
-  //       });
-    
-  //   sunriseSunsetContainer = document.getElementById('sunrise-sunset-container');
-
-  //   sunriseSunsetContainer.addEventListener('load', () => {
-  //     observer.observe(sunriseSunsetContainer);
-  //   })
-  // })
   
   useEffect(() => {
-    $('#sunrise-icon').removeClass('sunrise-animation');
-    $('#sunset-icon').removeClass('sunset-animation');
-    $('#sunrise-icon').css('transform', 'translatey(4rem)');
-    $('#sunrise-icon').css('opacity', '0%');
-
-    window.addEventListener('load', () => {
-      let observer, sunriseSunsetContainer;
-  
-      observer = new IntersectionObserver(() => {
-        $('#sunrise-icon').addClass('sunrise-animation');
-        $('#sunset-icon').addClass('sunset-animation');
-
-        useEffectCountRef.current = useEffectCountRef.current + 1;
-
-        if (useEffectCountRef.current > 2) {
-          setTimeout(() => {
-            $('#sunrise-icon').css('transform', 'translatey(0)');
-            $('#sunrise-icon').css('opacity', '100%');
-            $('#sunset-icon').css('transform', 'translatey(0)');
-            $('#sunset-icon').css('opacity', '100%');
-          }, 4000);
-        }}, { 
-              root: null,
-              rootMargin: '0px',
-              threshold: 1.0
-            });
-      
-      sunriseSunsetContainer = document.getElementById('sunrise-sunset-container');
-      observer.observe(sunriseSunsetContainer);
-    })
 
     if (apiLoaded === false) {
       (async function loadAuto() {
@@ -234,6 +167,7 @@ function App() {
         timeHours = timeUTCHours + offsetHours;
 
         if (timeHours > 23) timeHours = timeHours - 24;
+        else if (timeHours < 0) timeHours = 24 + timeHours;
 
         latAndLong = [];
         latAndLong.push(Number(latitude));
@@ -367,6 +301,7 @@ function App() {
 
         // HOURLY FORECAST LOOP 1
         for (let i = newHours; i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
+          console.log('i: ', i);
           const element = data.forecast.forecastday[dayOfForecast].hour[i];
 
           let timeSplit, hour, hour24, iconSource, hourlyTemp, highHourConverted;
@@ -976,47 +911,6 @@ function App() {
     setTempUnit('°F');
 }
 
-  function changeDisplayMode() {
-    const displayModeText = document.getElementById('display-mode-text');
-
-    if (displayMode === 'dark') {
-      $('#root').css('filter', 'invert(1)');
-      $('#temp-span').css('filter', 'invert(1)');
-      // if ((tempUnit === 'celsius' && temp < 15.5) || (tempUnit === 'fahrenheit' && temp < 60))
-      //   $('#temp-span').css('color', '#4F80FC');
-      // else if ((tempUnit === 'celsius' && (temp >= 15.5 && temp < 24)) || (tempUnit === 'fahrenheit' && (temp >= 60 && temp < 75)))
-      //   $('#temp-span').css('filter', 'none');
-      // else if ((tempUnit === 'celsius' && temp >= 24) || (tempUnit === 'fahrenheit' && temp >= 75))
-      //   $('#temp-span').css('color', '#D11500');
-
-      // if (weatherType === 'Snow')
-      //   $('icon').css('color', '#388EB2');
-        
-      $('#icon').css('filter', 'invert(1)');
-      // $('.shadow').css('box-shadow', '1px 1px 5px white');
-      displayModeText.innerText = 'switch to dark mode';
-      setDisplayMode('light');
-    }
-    else {
-      $('#root').css('filter', 'none');
-      $('#icon, #temp-span').css('filter', 'none');
-      // if ((tempUnit === 'celsius' && temp < 15.5) || (tempUnit === 'fahrenheit' && temp < 60))
-      //   $('#temp-span').css('color', '#1355FB');
-      // else if ((tempUnit === 'celsius' && (temp >= 15.5 && temp < 24)) || (tempUnit === 'fahrenheit' && (temp >= 60 && temp < 75)))
-      //   $('#temp-span').css('filter', 'none');
-      // else if ((tempUnit === 'celsius' && temp >= 24) || (tempUnit === 'fahrenheit' && temp >= 75))
-      //   $('#temp-span').css('color', '#FF6054');
-
-      // if (weatherType === 'Snow')
-      //   $('#icon').css('color', '#388EB2');
-      
-      $('#icon').css('filter', 'none');
-      // $('.shadow').css('box-shadow', '1px 1px 5px black');
-      displayModeText.innerText = 'switch to light mode';
-      setDisplayMode('dark');
-    }
-  }
-
   function openLocationSearch() {
     $('#invalid-location-feedback').text('');
     $('#autocomplete').addClass('expand');
@@ -1136,7 +1030,7 @@ function App() {
                   <div className='mask'>
                     <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunrise-2b.png' id='sunrise-icon' className='basis-full sunrise-sunset-icon' />
                   </div>
-                  <p className='letter-spacing-2'>{sunriseTime}</p>
+                  <p className='letter-spacing-2' id='sunrise-time'>{sunriseTime}</p>
                   {/* <p className='letter-spacing-2 basis-50-header'>{sunsetTime}</p> */}
                 </div>
                 <div className='basis-50-header sunset-info-container' id=''>
