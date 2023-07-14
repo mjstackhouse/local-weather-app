@@ -295,8 +295,8 @@ function App() {
           let iconSource = selectWeatherIcon(data.forecast.forecastday[i].day.condition.text, data.forecast.forecastday[i].day.condition.code, 12);
 
 
-          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
-          else $('#daily-forecast-container').append(`<div class='daily-forecast-span gray-border basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span flex basis-full align-items-center'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border basis-full align-items-center'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
         }
 
         // HOURLY FORECAST LOOP 1
@@ -468,8 +468,8 @@ function App() {
 
           let iconSource = selectWeatherIcon(data.forecast.forecastday[i].day.condition.text, data.forecast.forecastday[i].day.condition.code, 12);
 
-          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
-          else $('#daily-forecast-container').append(`<div class='daily-forecast-span gray-border basis-full'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span flex basis-full align-items-center'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border basis-full align-items-center'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconSource} class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
         }
 
         for (let i = hours + 1; i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
@@ -928,156 +928,126 @@ function App() {
   return (
     <div id='outermost-container'>
       <div className='' id='location-search-div'>
-        <button onClick={closeLocationSearch} id='close-location-search'><FontAwesomeIcon className="" icon={faXmark} /></button>
+        <button onClick={closeLocationSearch} id='close-location-search' className='text-white'><FontAwesomeIcon className="" icon={faXmark} /></button>
           {/* <label htmlFor='autocomplete'></label> */}
-          <p id='invalid-location-feedback'></p>
-          <input id='autocomplete' name='autocomplete' className='expand' placeholder='Enter a location' type='text'/>
+          <p id='invalid-location-feedback' className='text-base text-white'></p>
+          <input id='autocomplete' name='autocomplete' className='expand text-base' placeholder='Enter a location' type='text'/>
       </div>
-      <div className='shadow-2' id='navbar-container'>
-        <div className='width' id='navbar-container-2'>
-          {/* <div id="button-container" className="width">
-            <button id="temp-unit-button" className="button-2" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnitButton}</button>
-          </div> */}
-          <div id='change-location-container' className='text-left'>
-            <button id='change-location-button' onClick={openLocationSearch}>Choose location</button>
+      <div className='flex shadow-2' id='navbar-container'>
+        <div className='width flex justify-content-center align-items-center' id='navbar-container-2'>
+          <div id='change-location-container' className='text-left basis-50'>
+            <button id='change-location-button' className='text-base text-white' onClick={openLocationSearch}>Choose location</button>
           </div>
-          <div id="brand-logo" className='text-left' hidden>
-            <FontAwesomeIcon id='brand-icon' icon={faTemperatureLow} />
-            <h1 id='brand-name'>WeatherHere</h1>
-          </div>
-          <span id="temp-unit-span" className='text-right'>
-            {/* <button id="temp-unit-button" className="button-2 mr-1" name="change-temperature-unit" onClick={convertTempUnit}>{tempUnit}</button> */}
-            <button id='fahrenheit-button' className="temp-unit-button button-2" name="change-temperature-unit" onClick={convertToFahrenheit}>°F</button>
-            <span id='temp-unit-pipe' className='pipe-separator'>|</span>
-            <button id='celsius-button' className="temp-unit-button button-2" name="change-temperature-unit" onClick={convertToCelsius}>°C</button>
-            {/* <button id="display-mode" aria-label="switch-display-mode" className="" name="switch-display-mode" onClick={changeDisplayMode}>
-              <FontAwesomeIcon id="display-mode-icon" icon={faMoon} />
-            </button>
-            <span id="display-mode-text" hidden>switch to light mode</span> */}
+          <span id="temp-unit-span" className='text-right basis-50 text-white'>
+            <button id='fahrenheit-button' className="temp-unit-button text-base button-2" name="change-temperature-unit" onClick={convertToFahrenheit}>°F</button>
+            <span id='temp-unit-pipe' className='pipe-separator gray-text'>|</span>
+            <button id='celsius-button' className="temp-unit-button text-base button-2" name="change-temperature-unit" onClick={convertToCelsius}>°C</button>
           </span>
         </div>
       </div>
-      <div id="app-container">
+      <div id="app-container" className='flex justify-content-center align-items-center'>
         <div className='flex-wrap width' id='app-container-child'>
-          {/* <div id='location-container' className='basis-full go-up'>
-            <div id="location" className="letter-spacing-4 shadow"><span id="location-text" className=''>{location}</span></div>
-          </div> */}
-          {/* <div className='flex-wrap width' id='main-info-container'> */}
-            <div className="App width go-up-2" id='app'>
-              <div id="weather-loading" className="height"></div>
-              <div id='location-container' className='go-up'>
+            <div className="App width text-white justify-content-center align-items-center flex" id='app'>
+              <div id="weather-loading" className="height flex text-base justify-content-center align-items-center"></div>
+              <div id='location-container' className='align-items-center'>
                 <div id="location" className="letter-spacing-4 shadow"><span id="location-text" className=''>{location}</span></div>
                 <FontAwesomeIcon id="location-icon" icon={faLocationDot} />
               </div>
               <div id="weather-info-container">
                 <div id="first-col" className="flex-wrap">
-                  <div id="temp-div" className="flex-nowrap">
+                  <div id="temp-div" className="flex-nowrap flex">
                     <div className='temp-child'>
                       <span id="temp-span" className="line-height" name="temperature">{temp}</span>
                       <span id="temp-unit" className="line-height">{tempUnit}</span>
                     </div>
-                    <div id='feels-like'><span className=''>Feels like</span> {feelsLike}°</div>
+                    <div id='feels-like' className='text-base basis-full'><span className=''>Feels like</span> {feelsLike}°</div>
                   </div>
-                  <div id='high-low'>
+                  <div id='high-low' className='flex text-base basis-full justify-content-center align-items-center'>
                     <span><span id='high-text' className='font-bold' hidden>High</span> {highTemp}°<span className='pipe-separator'>|</span><span id='low-text' className='font-bold' hidden>Low </span>{lowTemp}°</span>
                   </div>
                 </div>
                 <div id="second-col" className='flex-wrap'>
-                  {/* <div id="icon-div"><FontAwesomeIcon id="icon" icon={weatherIcon} /></div> */}
-                  <div id="icon-div"><img id="icon" src={weatherIcon} /></div>
-                  <div id="description-div">
+                  <div id="icon-div" className='basis-full'><img id="icon" src={weatherIcon} /></div>
+                  <div id="description-div" className='text-base basis-full'>
                     <p id="description-text" className='letter-spacing-2'>{description}</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className='width extra-info-sections shadow-2' id='hourly-forecast-container'>
-              <div>
-                {/* <p id='hourly-forecast-header' className='extra-info-header letter-spacing-2 basis-full'>Hourly</p> */}
-              </div>
+            <div className='width extra-info-sections text-white shadow-2' id='hourly-forecast-container'>
             </div>
-            <div className='width extra-info-sections shadow-2' id='daily-forecast-container'>
-              {/* Day of the week/date, High/Low, One icon per condition text/code */}
+            <div className='width extra-info-sections text-white shadow-2' id='daily-forecast-container'>
             </div>
-          {/* </div> */}
-          {/* <div id='current-details-container' className=''> */}
-            <div className='width extra-info-sections shadow-2' id='wind-outer-container'>
+            <div className='width extra-info-sections text-white shadow-2 text-white' id='wind-outer-container'>
               <div className='basis-full' id='wind-header-container'>
                 <p id='wind-header' className='extra-info-header letter-spacing-2 gray-border'>Wind</p>
               </div>
-              <div className='extra-info wind-info' id='wind-speed-container'>
+              <div className='extra-info wind-info basis-33' id='wind-speed-container'>
               <p className='wind-info-header letter-spacing-2'>Speed</p>
                 <FontAwesomeIcon className='extra-info-icons' id="wind-icon" icon={faWind} />
                 <p className='extra-info-number' id="wind-speed">{windSpeed}</p>
               </div>
-              <div className='extra-info wind-info' id='wind-direction-container'>
+              <div className='extra-info wind-info basis-33' id='wind-direction-container'>
                 <p className='wind-info-header letter-spacing-2'>Direction</p>
                 <FontAwesomeIcon className='extra-info-icons' id="wind-direction-icon" icon={faLocationArrow} />
                 <p className='extra-info-number' id="wind-direction">{windDirection}</p>
               </div>
-              <div className='extra-info wind-info' id='wind-gust-container'>
+              <div className='extra-info wind-info basis-33' id='wind-gust-container'>
                 <p className='wind-info-header letter-spacing-2'>Gust</p>
                 <FontAwesomeIcon className='extra-info-icons' id="wind-gust-icon" icon={faArrowUpWideShort} />
                 <p className='extra-info-number' id="wind-gust">{windGust}</p>
               </div>
             </div>
-            <div className='width extra-info-sections shadow-2' id='sunrise-sunset-container'>
+            <div className='width extra-info-sections text-white shadow-2' id='sunrise-sunset-container'>
               <div className='' id='sunrise-sunset-icon-container'>
               </div>
-              <div id='sunrise-sunset-info' className='basis-full'>
-                <div className='basis-50-header sunset-info-container' id=''>
+              <div id='sunrise-sunset-info' className='flex basis-full'>
+                <div className='basis-50' id=''>
                   <p className='letter-spacing-2 font-bold'>Sunrise</p>
                   <div className='mask'>
                     <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunrise-2b.png' id='sunrise-icon' className='basis-full sunrise-sunset-icon' />
                   </div>
                   <p className='letter-spacing-2' id='sunrise-time'>{sunriseTime}</p>
-                  {/* <p className='letter-spacing-2 basis-50-header'>{sunsetTime}</p> */}
                 </div>
-                <div className='basis-50-header sunset-info-container' id=''>
+                <div className='basis-50' id=''>
                   <p className='letter-spacing-2 font-bold'>Sunset</p>
                   <div className='mask'>
                     <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunset-2b.png' id='sunset-icon' className='basis-full sunrise-sunset-icon' />
                   </div>
                   <p className='letter-spacing-2'>{sunsetTime}</p>
                 </div>
-                {/* <div className='basis-full flex-wrap'>
-                  <p className='letter-spacing-2 basis-50-header'>Sunrise</p>
-                  <p className='letter-spacing-2 basis-50-header'>Sunset</p>
-                </div> */}
               </div>
             </div>
-            <div className='extra-info-sections width shadow-2' id='extra-info-section' hidden>
-              <div className='go-down basis-full' id='extra-info-container'>
-                <div id="humidity-container" className='shadow extra-info'>
+            <div className='extra-info-sections text-white width shadow-2 text-white' id='extra-info-section' hidden>
+              <div className='flex basis-full align-items-center' id='extra-info-container'>
+                <div id="humidity-container" className='shadow basis-33'>
                   <p id='humidity-header' className='extra-info-header letter-spacing-2'>Humidity</p>
                   <FontAwesomeIcon className='extra-info-icons' id='droplet' icon={faDroplet} />
                   <p className='extra-info-number' id="humidity-number">{humidity}%</p>
                 </div>
-                <div id="visibility-container" className='shadow extra-info'>
+                <div id="visibility-container" className='shadow basis-33'>
                   <p id='visibility-header' className='extra-info-header letter-spacing-2'>Visibility</p>
-                  {/* <FontAwesomeIcon className='extra-info-icons gray-text' id="visibility-icon" icon={faEye} /> */}
                   <img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/eye-solid-edited-1b.png' className='extra-info-icons' id="visibility-icon" />
                   <p className='extra-info-number' id="visibility-number">{visibility}</p>
                 </div>
-                <div id="pressure-container" className='shadow extra-info'>
+                <div id="pressure-container" className='shadow basis-33'>
                   <p id='pressure-header' className='extra-info-header letter-spacing-2'>Pressure</p>
-                  <FontAwesomeIcon className='extra-info-icons' id="wind-icon" icon={faDownLeftAndUpRightToCenter} />
+                  <FontAwesomeIcon className='extra-info-icons' icon={faDownLeftAndUpRightToCenter} />
                   <p className='extra-info-number' id="pressure-number">{pressure}</p>
                 </div>
               </div>
             </div>
-            <div className='width extra-info-sections shadow-2' id='uv-air-container'>
-              <div className='basis-50-header'>
+            <div className='width extra-info-sections text-white shadow-2' id='uv-air-container'>
+              <div className='basis-50'>
                 <p className='letter-spacing-2 font-bold'>UV Index</p>
                 <div className='' >
                   <div id='uv-number-container'>
                     <p className='uv-air-number' id="uv-number">{uvIndex}</p>
                   </div>
                 </div>
-                {/* <p className='uv-air-number' id="uv-number">{uvIndex}</p> */}
                 <p className='extra-info-number'>{uvIndexDescription}</p>
               </div>
-              <div className='basis-50-header'>
+              <div className='basis-50'>
                 <p className='letter-spacing-2 font-bold'>Air Quality</p>
                 <div>
                   <div id='air-quality-number-container'>
@@ -1087,16 +1057,9 @@ function App() {
                 <p className='extra-info-number'>{airQualityDescription}</p>
               </div>
             </div>
-            {/* <div id='brand-text-container' className=''>
-              <div id='brand-with-copyright'>
-                <span>Copyright © 2023</span>
-                <img id='brand-text' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/weatherapp-brand-text-white-2.png' />
-              </div>
-            </div> */}
-          {/* </div> */}
         </div>
-        <div id='brand-text-container' className=''>
-          <div id='brand-with-copyright'>
+        <div id='brand-text-container' className='flex text-white'>
+          <div id='brand-with-copyright' className='flex align-items-center'>
             <span>Copyright © 2023</span>
             <img id='brand-text' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/weatherapp-brand-text-white-2.png' />
           </div>
