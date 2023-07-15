@@ -32,6 +32,7 @@ function App() {
   const [fetched, setFetched] = useState(false);
   const [apiLoaded, setApiLoaded] = useState(false);
   const [location, setLocation] = useState(null);
+  const [locationBtnDisabled, setLocationBtnDisabled] = useState(true);
   const [fahrenheitBtnDisabled, setFahrenheitBtnDisabled] = useState(true);
   const [celsiusBtnDisabled, setCelsiusBtnDisabled] = useState(true);
   const [description, setDescription] = useState(null);
@@ -186,12 +187,14 @@ function App() {
         navigatorObj.permissions.query({ name: 'geolocation' }).then((permissionStatus => {
           if (permissionStatus.state === 'granted') {
             displayLoadingText('Loading your local weather');
+            setLocationBtnDisabled(true);
           }
         }));
 
         geolocationObj.getCurrentPosition(async (position) => {
           userLocationPermissionRef.current = 'granted';
           displayLoadingText('Loading your local weather');
+          setLocationBtnDisabled(true);
           coordinates = position.coords;
           timestamp = position.timestamp;
           timestampDateObj = new Date(timestamp);
@@ -202,11 +205,13 @@ function App() {
           locationRetrieved.current = true;
           fetchAndDisplayWeather(timeHours);
         }, () => {
+            setLocationBtnDisabled(false);
             $('#weather-loading').text('Please turn on your location, or feel free to choose your location above');
   
             navigatorObj.permissions.query({ name: 'geolocation' }).then((permissionStatus => {
               permissionStatus.onchange = () => {
                 displayLoadingText('Loading your local weather');
+                setLocationBtnDisabled(true);
                 fetchData();
               }
             }));
@@ -297,8 +302,8 @@ function App() {
 
           let iconProps = selectWeatherIcon(data.forecast.forecastday[i].day.condition.text, data.forecast.forecastday[i].day.condition.code, 12);
 
-          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span flex basis-full align-items-center'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source} alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
-          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border basis-full align-items-center'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source}  alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span flex basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source} alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source}  alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
         }
 
         // HOURLY FORECAST LOOP 1
@@ -409,8 +414,8 @@ function App() {
         setFahrenheitBtnDisabled(true);
         setCelsiusBtnDisabled(false);
 
-        $('#fahrenheit-button').css('color', 'white');
-        $('#celsius-button').css('color', 'gray');
+        // $('#fahrenheit-button').css('color', 'white');
+        // $('#celsius-button').css('color', 'gray');
 
         tempF.current = Math.round(data.current.temp_f);
         tempC.current = Math.round(data.current.temp_c);
@@ -474,8 +479,8 @@ function App() {
 
           let iconProps = selectWeatherIcon(data.forecast.forecastday[i].day.condition.text, data.forecast.forecastday[i].day.condition.code, 12);
           
-          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span flex basis-full align-items-center'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source} alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
-          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border basis-full align-items-center'><span class='basis-33 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-33 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source} alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-33 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span flex basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source} alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source}  alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
         }
 
         for (let i = hours + 1; i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
@@ -580,8 +585,8 @@ function App() {
         setFahrenheitBtnDisabled(false);
         setCelsiusBtnDisabled(true);
 
-        $('#fahrenheit-button').css('color', 'gray');
-        $('#celsius-button').css('color', 'white');
+        // $('#fahrenheit-button').css('color', 'gray');
+        // $('#celsius-button').css('color', 'white');
 
         tempF.current = Math.round(data.current.temp_f);
         tempC.current = Math.round(data.current.temp_c);
@@ -610,6 +615,16 @@ function App() {
       hourlyForecastArrRef.current = hourlyForecastArr;
 
       setLocation(data.location.name);
+      if (data.location.name.length >= 16 && data.location.name.length < 19) {
+        $('#location, #location-icon').css('font-size', '1rem');
+      }
+      else if (data.location.name.length >= 19 && data.location.name.length < 22) {
+        $('#location, #location-icon').css('font-size', '0.9rem');
+      } 
+      else if (data.location.name.length >= 22) {
+        $('#location, #location-icon').css('font-size', '0.8rem');
+      }
+
       setDescription(description);
       setHumidity(data.current.humidity);
       setWindDegree(data.current.wind_degree);
@@ -687,15 +702,10 @@ function App() {
 
       if (hours >= 21 || (hours >= 0 && hours < 6)) {
         $('#app').css('color', 'white');
+        $('#app').css('background-color', '#024d89');
         $('#app').addClass('shadow-2');
         
-        $('#brand-text-container').css('background-color', '#1F1F1F');
-        $('#location-search-div').css('background-color', '#1F1F1F');
-        $('#navbar-container').css('background-color', '#1F1F1F');
-        $('.uv-air-number').css('background-color', '#1F1F1F');
-        $('.extra-info-sections').css('background-color', '#1F1F1F');
-
-        $('#app').css('background-color', '#024d89');
+        $('#brand-text-container, #location-search-div, #navbar-container, .uv-air-number, .extra-info-sections').css('background-color', '#1F1F1F');
         
         $('#root').css('background-color', 'transparent');
         clearTimeout(timeoutId);
@@ -709,11 +719,7 @@ function App() {
         $('#app').css('color', 'black');
         $('#app').removeClass('shadow-2');
 
-        $('#brand-text-container').css('background-color', 'black');
-        $('#location-search-div').css('background-color', 'black');
-        $('#navbar-container').css('background-color', 'black');
-        $('.uv-air-number').css('background-color', 'black');
-        $('.extra-info-sections').css('background-color', 'black');
+        $('#brand-text-container, #location-search-div, #navbar-container, .uv-air-number, .extra-info-sections').css('background-color', 'black');
         
         $('#root').css('background-color', 'transparent');
         clearTimeout(timeoutId);
@@ -724,14 +730,10 @@ function App() {
       else if (hours >= 10 && hours < 18) {
         $('#app').css('color', 'black');
         $('#app').addClass('shadow-2');
-
-        $('#brand-text-container').css('background-color', 'black');
-        $('#location-search-div').css('background-color', 'black');
-        $('#navbar-container').css('background-color', 'black');
-        $('.uv-air-number').css('background-color', 'black');
-        $('.extra-info-sections').css('background-color', 'black');
-
         $('#app').css('background-color', '#45c7f3');
+
+        $('#brand-text-container, #location-search-div, #navbar-container, .uv-air-number, .extra-info-sections').css('background-color', 'black');
+
         $('#root').css('background-color', 'transparent');
         clearTimeout(timeoutId);
 
@@ -743,11 +745,7 @@ function App() {
         $('#app').css('color', 'black');
         $('#app').removeClass('shadow-2');
 
-        $('#brand-text-container').css('background-color', 'black');
-        $('#location-search-div').css('background-color', 'black');
-        $('#navbar-container').css('background-color', 'black');
-        $('.uv-air-number').css('background-color', 'black');
-        $('.extra-info-sections').css('background-color', 'black');
+        $('#brand-text-container, #location-search-div, #navbar-container, .uv-air-number, .extra-info-sections').css('background-color', 'black');
 
         $('#brand-text-container').css('background-color', 'black');
         $('#root').css('background-color', 'transparent');
@@ -766,8 +764,8 @@ function App() {
       $('#location-container').css('display', 'flex');
       $('#sunrise-sunset-container').css('display', 'flex');
       $('.extra-info-sections').css('display', 'flex');
-      $('#celsius-button').attr('disabled', 'false');
-
+      
+      setLocationBtnDisabled(false);
       closeLocationSearch();
       $('#autocomplete').val('');
     }
@@ -887,8 +885,8 @@ function App() {
       dailyForecastLowElements[i].innerText = `${Math.round(dailyForecastArrRef.current[i].mintemp_c)}°`;
     }
 
-    $('#fahrenheit-button').css('color', 'gray');
-    $('#celsius-button').css('color', 'white');
+    // $('#fahrenheit-button').css('color', 'gray');
+    // $('#celsius-button').css('color', 'white');
 
     setTemp(tempC.current);
     setFeelsLike(feelsLikeC.current);
@@ -919,8 +917,8 @@ function App() {
       dailyForecastLowElements[i].innerText = `${Math.round(dailyForecastArrRef.current[i].mintemp_f)}°`;
     }
 
-    $('#fahrenheit-button').css('color', 'white');
-    $('#celsius-button').css('color', 'gray');
+    // $('#fahrenheit-button').css('color', 'white');
+    // $('#celsius-button').css('color', 'gray');
 
     setTemp(tempF.current);
     setFeelsLike(feelsLikeF.current);
@@ -952,7 +950,7 @@ function App() {
   return (
     <div id='outermost-container'>
       <div id='location-search-div'>
-        <button onClick={closeLocationSearch} id='close-location-search' className='text-white' aria-label='Close the location search'><FontAwesomeIcon icon={faXmark} /></button>
+        <button onClick={closeLocationSearch} id='close-location-search' className='gray-text' aria-label='Close the location search'><FontAwesomeIcon icon={faXmark} /></button>
           {/* <label htmlFor='autocomplete'></label> */}
         <p id='invalid-location-feedback' className='text-base text-white'></p>
         <input id='autocomplete' name='autocomplete' className='expand text-base' placeholder='Enter a location' type='text'/>
@@ -960,7 +958,7 @@ function App() {
       <div className='flex shadow-2' id='navbar-container'>
         <div className='width flex justify-content-center align-items-center' id='navbar-container-2'>
           <div id='change-location-container' className='text-left basis-50'>
-            <button id='change-location-button' className='text-base text-white' aria-label='Choose a new location' onClick={openLocationSearch}>Choose location</button>
+            <button id='change-location-button' className='text-base' aria-label='Choose a new location' onClick={openLocationSearch} disabled={locationBtnDisabled}>Choose location</button>
           </div>
           <span id="temp-unit-span" className='text-right basis-50 text-white'>
             <button id='fahrenheit-button' className="temp-unit-button text-base button-2" name="change-temperature-unit" aria-label='Change the temperature unit to Fahrenheit' onClick={convertToFahrenheit} disabled={fahrenheitBtnDisabled}>°F</button>
@@ -1082,12 +1080,12 @@ function App() {
             </div>
           </div>
         </div>
-        <div id='brand-text-container' className='flex text-white'>
+        <div id='brand-text-container' className='flex gray-text'>
           <div id='brand-with-copyright' className='flex align-items-center'>
             <span>Copyright © 2023</span>
             <img id='brand-text' alt='The "weather here" text logo' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/weatherapp-brand-text-white-2.png' />
           </div>
-          <div className='basis-full gray-text' id='weather-api-credit'>
+          <div className='basis-full' id='weather-api-credit'>
             Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a>
           </div>
         </div>
