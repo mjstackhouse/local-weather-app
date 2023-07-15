@@ -10,6 +10,10 @@ button {
   margin: 0;
 }
 
+button:disabled {
+  cursor: not-allowed;
+}
+
 a {
   color: #A3A3A3;
 }
@@ -56,6 +60,10 @@ a:visited {
 .button-2:hover {
   cursor: pointer;
   color: gray;
+}
+
+.button-2:disabled {
+  cursor: not-allowed;
 }
 
 .flex-nowrap {
@@ -176,7 +184,7 @@ a:visited {
   padding: 0 0.5rem;
 }
 
-#wind-outer-container {
+#wind-container {
   display: none;
   flex-wrap: wrap;
   flex-direction: row;
@@ -621,7 +629,6 @@ a:visited {
   }
 }
 
-/* 730, 315 */
 @media (min-width: 540px) {
   html {
     font-size: 17px;
@@ -645,7 +652,6 @@ a:visited {
     height: 300px;
   }
   #autocomplete {
-    /* width: 85vw; */
     max-width: 675px;
   }
   #temp-unit-button, #display-mode {
@@ -654,19 +660,12 @@ a:visited {
   #icon {
     height: 8rem;
     margin: 0.5em 0;
-    /* filter: drop-shadow(0 1px 20px rgba(0, 0, 0, 0.25)); */
   }
   #location, #location-icon {
     font-size: 2rem;
   }
   #temp-unit, #temp-span {
     font-size: 5rem;
-  }
-  .App {
-    /* margin-bottom: 2rem; */
-  }
-  #wind-outer-container {
-    /* margin-bottom: 1rem; */
   }
 }
 
