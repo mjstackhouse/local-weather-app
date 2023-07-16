@@ -226,12 +226,12 @@ a:visited {
 }
 
 #brand-with-copyright {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   margin: 0 auto;
 }
 
 #weather-api-credit {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 }
 
 #brand-text {
@@ -240,7 +240,7 @@ a:visited {
 
 .extra-info-sections {
   display: none;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   border-radius: 1rem;
   background-color: transparent;
   transition: background-color 2s ease-in;
