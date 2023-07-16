@@ -60,6 +60,10 @@ a:visited {
   flex-basis: 100%;
 }
 
+.border-sharp {
+  border-radius: 0;
+}
+
 .button-2 {
   color: #ABABAB;
   background-color: transparent;
@@ -102,9 +106,9 @@ a:visited {
   font-weight: bold;
 }
 
-.gray-border {
+/* .gray-border {
   border-bottom: 0.5px solid gray;
-}
+} */
 
 .gray-border-y {
   border-top: 0.5px solid gray;
@@ -112,11 +116,11 @@ a:visited {
 }
 
 .gray-border-bottom {
-  border-bottom: 0.5px solid gray;
+  border-bottom: 0.1px solid #383838;
 }
 
 .gray-border-right {
-  border-right: 0.5px solid gray;
+  border-right: 0.1px solid #383838;
 }
 
 .gray-text {
@@ -126,6 +130,10 @@ a:visited {
 
 .height {
   height: 215px;
+}
+
+.h-max-content {
+  height: max-content;
 }
 
 .justify-content-center {
@@ -138,6 +146,10 @@ a:visited {
 
 .letter-spacing-4 {
   letter-spacing: 4px;
+}
+
+.mb-75 {
+  margin-bottom: 0.75rem;
 }
 
 .mr-1 {
@@ -173,7 +185,7 @@ a:visited {
 }
 
 .width {
-  width: 300px;
+  width: 305px;
 }
 
 /* SPECIFIC CLASSES */
@@ -188,6 +200,7 @@ a:visited {
   background-image: none;
   letter-spacing: 1px !important;
   background-size: cover;
+  background-position: center;
   transition: background-image 2s linear, background-color 2s linear;
 }
 
@@ -213,12 +226,12 @@ a:visited {
 }
 
 #brand-with-copyright {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   margin: 0 auto;
 }
 
 #weather-api-credit {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 #brand-text {
@@ -227,10 +240,9 @@ a:visited {
 
 .extra-info-sections {
   display: none;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   border-radius: 1rem;
   background-color: transparent;
-  margin-bottom: 0.75rem;
   transition: background-color 2s ease-in;
   height: max-content;
 }
@@ -259,6 +271,7 @@ a:visited {
 }
 
 .pipe-separator {
+  font-weight: 300;
   margin: 0 0.3rem;
 }
 
@@ -471,47 +484,107 @@ a:visited {
   flex-wrap: wrap;
 }
 
+.rise-set-container {
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: max-content;
+}
+
+.rise-set-header {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  padding-bottom: 0.5rem;
+}
+
+.rise-set-subheader {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.pt-half {
+  padding-top: 0.25rem;
+}
+
+#uv-air-child {
+  /* margin-right: 0.75rem; */
+}
+
+#uv-air-child, #rain-coverage-container {
+  margin-bottom: 0;
+}
+
+#sunrise-sunset-info {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+}
+
 .mask {
   overflow-y: hidden;
 }
 
 .sunrise-sunset-icon {
-  height: 4rem;
+  height: 3rem;
 }
 
 #sunset-icon {
   opacity: 100%;
 }
 
-.uv-air-number {
-  font-size: 2rem;
-  margin: 1rem 0;
+#uv-air-container {
+  display: flex;
+  /* justify-content: space-between; */
+  margin-bottom: 1.5rem;
 }
 
-#uv-air-container {
-  margin-bottom: 1.5rem;
+#rain-coverage-container {
+  height: 100%;
+  /* justify-content: space-between; */
+}
+
+#precipitation-container {
+  flex-wrap: wrap;
+  /* flex-direction: column; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+  height: 100%;
+}
+
+#precipitation-icon, #coverage-icon {
+  height: 2rem;
+}
+
+#precipitation-icon-container, #coverage-icon-container {
+  height: 2rem;
+  margin: 0 auto;
+  padding: 0.25rem;
+}
+
+#precipitation-header {
+  align-self: start;
 }
 
 #uv-number-container, #air-quality-number-container {
   margin: 0 auto;
   border-radius: 20rem;
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 2rem;
+  width: 2rem;
   padding: 0.25rem;
   background: transparent;
 }
 
 .uv-air-number {
+  font-size: 1.5rem;
   border-radius: 20rem;
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 2rem;
+  width: 2rem;
   margin: 0 auto !important;
   background-color: #1f1f1f;
 }
 
 #extra-info-section {
+  justify-content: center;
   margin-bottom: 0.75rem;
-  background-color: #1F1F1F;
   transition: background-color 2s linear;
 }
 
@@ -519,6 +592,9 @@ a:visited {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
+}
+
+#extra-info-container {
   margin: 0 auto;
 }
 
@@ -642,13 +718,22 @@ a:visited {
 
 @media (min-width: 400px) {
   .width {
-    width: 370px;
+    width: 375px;
   }
   #high-text, #low-text {
     display: inline;
   }
   #autocomplete {
     max-width: 340px;
+  }
+}
+
+@media (min-width: 414px) {
+  .width {
+    width: 390px;
+  }
+  #autocomplete {
+    max-width: 355px;
   }
 }
 
