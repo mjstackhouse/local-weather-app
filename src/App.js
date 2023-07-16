@@ -787,11 +787,12 @@ function App() {
       $('#weather-loading').removeClass('height');
       
       $('#app').addClass('height');
-      $('#app').css('margin-bottom', '1.5rem');
+      $('#app, #uv-air-container').css('margin-bottom', '1.5rem');
       $('#weather-info-container').css('display', 'grid');
       $('#location-container').css('display', 'flex');
       $('#sunrise-sunset-container').css('display', 'flex');
       $('.extra-info-sections').css('display', 'flex');
+      $('#uv-air-container').css('display', 'flex');
       
       setLocationBtnDisabled(false);
       closeLocationSearch();
@@ -1050,7 +1051,7 @@ function App() {
               <p className='extra-info-number' id="wind-gust">{windGust}</p>
             </div>
           </div>
-          <div className='width text-white mb-75' id='sunrise-sunset-container'>
+          <div className='width text-white mb-75' id='sunrise-sunset-container' hidden>
             <div id='sunrise-sunset-info' className='basis-full'>
               <div className='rise-set-container extra-info-sections shadow-2 basis-50 mr-1' id='sun-container'>
                 <p className='font-bold rise-set-header gray-border-bottom'>Sun</p>
@@ -1100,7 +1101,7 @@ function App() {
               </div>
             </div>
           </div>
-          <div className='flex extra-info-sections shadow-2 text-white width mb-75' id='extra-info-section'>
+          <div className='flex extra-info-sections shadow-2 text-white width mb-75' id='extra-info-section' hidden>
             {/* <div className='flex basis-full align-items-center' id='extra-info-container'> */}
               <div id="humidity-container" className='flex-wrap basis-33'>
                 <p id='humidity-header' className='extra-info-header basis-full'>Humidity</p>
@@ -1119,7 +1120,7 @@ function App() {
               </div>
             {/* </div> */}
           </div>
-          <div className='width flex align-items-center text-white' id='uv-air-container'>
+          <div className='width align-items-center text-white' id='uv-air-container' hidden>
               <div className='flex-wrap basis-25 extra-info-sections shadow-2  mr-1' id='uv-container'>
                 <p className='font-bold basis-full'>UV Index</p>
                 <div className='' >
