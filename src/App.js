@@ -48,10 +48,14 @@ function App() {
   const [visibility, setVisibility] = useState(null);
   const [sunriseTime, setSunrise] = useState(null);
   const [sunsetTime, setSunset] = useState(null);
+  const [moonriseTime, setMoonrise] = useState(null);
+  const [moonsetTime, setMoonset] = useState(null);
   const [uvIndex, setUVIndex] = useState(null);
   const [uvIndexDescription, setUVIndexDescription] = useState(null);
   const [airQuality, setAirQuality] = useState(null);
   const [airQualityDescription, setAirQualityDescription] = useState(null);
+  const [cloudCoverage, setCloudCoverage] = useState(null);
+  const [precip, setPrecip] = useState(null);
   const [pressure, setPressure] = useState(null);
 
   // Hourly Forecast
@@ -78,6 +82,8 @@ function App() {
   const visibilityKm = useRef(null);
   const pressureIn = useRef(null);
   const pressureMb = useRef(null);
+  const precipIn = useRef(null);
+  const precipMm = useRef(null);
   
   const hourlyForecastArrRef = useRef([]);
   let hourlyForecastArr;
@@ -164,11 +170,18 @@ function App() {
 
         const timeNow = new Date();
         const timeUTCHours = timeNow.getUTCHours();
+        const timeUTCMinutes = timeNow.getUTCMinutes();
         const offsetHours = timezoneOffset / 60;
 
         console.log('timeUTCHours & offsetHours', timeUTCHours, offsetHours);
 
         timeHours = timeUTCHours + offsetHours;
+
+        if (Math.round(timeHours) > timeHours) {
+          if (timeUTCMinutes >= 30) {
+            timeHours += 1;
+          }
+        }
 
         if (timeHours > 23) timeHours = timeHours - 24;
         else if (timeHours < 0) timeHours = 24 + timeHours;
@@ -303,17 +316,18 @@ function App() {
           let iconProps = selectWeatherIcon(data.forecast.forecastday[i].day.condition.text, data.forecast.forecastday[i].day.condition.code, 12);
 
           if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span flex basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source} alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
-          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source}  alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border-bottom basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source}  alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_f)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_f)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
         }
 
         // HOURLY FORECAST LOOP 1
-        for (let i = newHours; i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
+        for (let i = Math.floor(newHours); i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
           console.log('i: ', i);
           const element = data.forecast.forecastday[dayOfForecast].hour[i];
 
           let timeSplit, hour, hour24, iconProps, hourlyTemp, highHourConverted;
 
           timeSplit = element.time.split(' ');
+          
           if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) < 10) {
             if (Number(`${timeSplit[1][0]}${timeSplit[1][1]}`) === 0) {
               hour = '12 am';
@@ -413,6 +427,7 @@ function App() {
         setTempUnit('°F');
         setFahrenheitBtnDisabled(true);
         setCelsiusBtnDisabled(false);
+        setPrecip(`${data.current.precip_in} in`);
 
         // $('#fahrenheit-button').css('color', 'white');
         // $('#celsius-button').css('color', 'gray');
@@ -431,6 +446,8 @@ function App() {
         visibilityKm.current = `${data.current.vis_km} km`;
         pressureIn.current = `${data.current.pressure_in} in`;
         pressureMb.current = `${data.current.pressure_mb} mb`;
+        precipIn.current = `${data.current.precip_in} in`;
+        precipMm.current = `${data.current.precip_mm} mm`;
 
         if (!data.current.gust_mph) setWindGust('0 mph');
         else {
@@ -480,10 +497,10 @@ function App() {
           let iconProps = selectWeatherIcon(data.forecast.forecastday[i].day.condition.text, data.forecast.forecastday[i].day.condition.code, 12);
           
           if (i === 2) $('#daily-forecast-container').append(`<div class='daily-forecast-span flex basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source} alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
-          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source}  alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
+          else $('#daily-forecast-container').append(`<div class='daily-forecast-span flex gray-border-bottom basis-full align-items-center'><span class='basis-30 text-left flex-wrap'><span class='daily-forecast-date gray-text basis-full mr-1'>${dateShortened}</span><span class='daily-forecast-day font-bold basis-full'>${dayOfTheWeek}</span></span><span class='basis-45 flex-wrap daily-forecast-info justify-content-center flex'><span><img src=${iconProps.source}  alt='${iconProps.alt}' class='daily-forecast-icon' /></span><span class='daily-forecast-highlow-container'><span class='daily-forecast-high'>${Math.round(data.forecast.forecastday[i].day.maxtemp_c)}°</span><span class='pipe-separator'>|</span><span class='daily-forecast-low'>${Math.round(data.forecast.forecastday[i].day.mintemp_c)}°</span></span></span><span class='basis-25 flex-wrap daily-forecast-rain flex justify-content-center align-items-center'><img src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' class='daily-forecast-icon' /><span>${Math.round(data.forecast.forecastday[i].day.daily_chance_of_rain)}%</span></span></div>`);
         }
 
-        for (let i = hours + 1; i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
+        for (let i = Math.floor(newHours); i < data.forecast.forecastday[dayOfForecast].hour.length; i++) {
           const element = data.forecast.forecastday[dayOfForecast].hour[i];
 
           let timeSplit, hour, hour24, iconProps, hourlyTemp, highHourConverted;
@@ -584,9 +601,7 @@ function App() {
         setTempUnit('°C');
         setFahrenheitBtnDisabled(false);
         setCelsiusBtnDisabled(true);
-
-        // $('#fahrenheit-button').css('color', 'gray');
-        // $('#celsius-button').css('color', 'white');
+        setPrecip(`${data.current.precip_mm} mm`);
 
         tempF.current = Math.round(data.current.temp_f);
         tempC.current = Math.round(data.current.temp_c);
@@ -602,6 +617,8 @@ function App() {
         visibilityKm.current = `${data.current.vis_km} km`;
         pressureIn.current = `${data.current.pressure_in} in`;
         pressureMb.current = `${data.current.pressure_mb} mb`;
+        precipIn.current = `${data.current.precip_in} in`;
+        precipMm.current = `${data.current.precip_mm} mm`;
 
         if (!data.current.gust_mph) setWindGust('0 kph');
         else {
@@ -620,7 +637,7 @@ function App() {
       }
       else if (data.location.name.length >= 19 && data.location.name.length < 22) {
         $('#location, #location-icon').css('font-size', '0.9rem');
-      } 
+      }
       else if (data.location.name.length >= 22) {
         $('#location, #location-icon').css('font-size', '0.8rem');
       }
@@ -634,19 +651,30 @@ function App() {
 
       $('#wind-direction-icon').css('transform', `rotate(${windDirectionIconRotation}deg)`);
 
-      let sunriseFormatted, sunsetFormatted;
+      let sunriseFormatted, sunsetFormatted, moonriseFormatted, moonsetFormatted;
 
       if (data.forecast.forecastday[0].astro.sunrise[0] === '0') sunriseFormatted = data.forecast.forecastday[0].astro.sunrise.slice(1, 9);
       else sunriseFormatted = data.forecast.forecastday[0].astro.sunrise;
 
-      setSunrise(sunriseFormatted);
+      setSunrise(sunriseFormatted.toLowerCase());
 
       if (data.forecast.forecastday[0].astro.sunset[0] === '0') sunsetFormatted = data.forecast.forecastday[0].astro.sunset.slice(1, 9);
       else sunsetFormatted = data.forecast.forecastday[0].astro.sunset;
 
-      setSunset(sunsetFormatted);
+      setSunset(sunsetFormatted.toLowerCase());
+
+      if (data.forecast.forecastday[0].astro.moonrise[0] === '0') moonriseFormatted = data.forecast.forecastday[0].astro.moonrise.slice(1, 9);
+      else moonriseFormatted = data.forecast.forecastday[0].astro.moonrise;
+
+      setMoonrise(moonriseFormatted.toLowerCase());
+
+      if (data.forecast.forecastday[0].astro.moonset[0] === '0') moonsetFormatted = data.forecast.forecastday[0].astro.moonset.slice(1, 9);
+      else moonsetFormatted = data.forecast.forecastday[0].astro.moonset;
+
+      setMoonset(moonsetFormatted.toLowerCase());
       
       setAirQuality(data.current.air_quality['us-epa-index']);
+      setCloudCoverage(data.current.cloud);
 
       // Air quality colors: (0, 228, 0), (255, 255, 0), (255, 126, 0), (255, 0, 0), (143, 63, 151), (126, 0, 35)
       if (data.current.air_quality['us-epa-index'] === 1) {
@@ -730,15 +758,15 @@ function App() {
       else if (hours >= 10 && hours < 18) {
         $('#app').css('color', 'black');
         $('#app').addClass('shadow-2');
-        $('#app').css('background-color', '#45c7f3');
+        $('#app').css('background-color', '#01A4E4');
 
         $('#brand-text-container, #location-search-div, #navbar-container, .uv-air-number, .extra-info-sections').css('background-color', 'black');
 
         $('#root').css('background-color', 'transparent');
         clearTimeout(timeoutId);
 
-        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-1-landscape.jpg")');
-        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-1.jpg")');
+        if (window.visualViewport.width >= 640) $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-2b-landscape.jpg")');
+        else $('#root').css('background-image', 'url("https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-bluesky-2b.jpg")');
       }
       else if (hours >= 18 && hours < 21) {
         $('#app').css('background-color', 'transparent');
@@ -899,6 +927,7 @@ function App() {
     setTempUnit('°C');
     setFahrenheitBtnDisabled(false);
     setCelsiusBtnDisabled(true);
+    setPrecip(precipMm.current);
   }
 
   function convertToFahrenheit() {
@@ -931,6 +960,7 @@ function App() {
     setTempUnit('°F');
     setFahrenheitBtnDisabled(true);
     setCelsiusBtnDisabled(false);
+    setPrecip(precipIn.current);
 }
 
   function openLocationSearch() {
@@ -991,93 +1021,137 @@ function App() {
               <div id="second-col" className='flex-wrap'>
                 <div id="icon-div" className='basis-full'><img id="icon" alt={weatherIconAlt} src={weatherIcon} /></div>
                 <div id="description-div" className='text-base basis-full'>
-                  <p id="description-text" className='letter-spacing-2'>{description}</p>
+                  <p id="description-text" className=''>{description}</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className='width extra-info-sections text-white shadow-2' id='hourly-forecast-container'>
+          <div className='width extra-info-sections text-white shadow-2 mb-75' id='hourly-forecast-container'>
           </div>
-          <div className='width extra-info-sections text-white shadow-2' id='daily-forecast-container'>
+          <div className='width extra-info-sections text-white shadow-2 mb-75' id='daily-forecast-container'>
           </div>
-          <div className='width extra-info-sections text-white shadow-2 text-white' id='wind-container'>
+          <div className='width extra-info-sections text-white shadow-2 text-white mb-75' id='wind-container'>
             <div className='basis-full' id='wind-header-container'>
-              <p id='wind-header' className='extra-info-header letter-spacing-2 gray-border'>Wind</p>
+              <p id='wind-header' className='extra-info-header gray-border-bottom'>Wind</p>
             </div>
             <div className='extra-info wind-info basis-33' id='wind-speed-container'>
-            <p className='wind-info-header letter-spacing-2'>Speed</p>
+            <p className='wind-info-header'>Speed</p>
               <FontAwesomeIcon className='extra-info-icons' id="wind-icon" icon={faWind} />
               <p className='extra-info-number' id="wind-speed">{windSpeed}</p>
             </div>
             <div className='extra-info wind-info basis-33' id='wind-direction-container'>
-              <p className='wind-info-header letter-spacing-2'>Direction</p>
+              <p className='wind-info-header'>Direction</p>
               <FontAwesomeIcon className='extra-info-icons' id="wind-direction-icon" icon={faLocationArrow} />
               <p className='extra-info-number' id="wind-direction">{windDirection}</p>
             </div>
             <div className='extra-info wind-info basis-33' id='wind-gust-container'>
-              <p className='wind-info-header letter-spacing-2'>Gust</p>
+              <p className='wind-info-header'>Gust</p>
               <FontAwesomeIcon className='extra-info-icons' id="wind-gust-icon" icon={faArrowUpWideShort} />
               <p className='extra-info-number' id="wind-gust">{windGust}</p>
             </div>
           </div>
-          <div className='width extra-info-sections text-white shadow-2' id='sunrise-sunset-container'>
-            <div className='' id='sunrise-sunset-icon-container'>
-            </div>
-            <div id='sunrise-sunset-info' className='flex basis-full'>
-              <div className='basis-50' id='sunrise-container'>
-                <p className='letter-spacing-2 font-bold'>Sunrise</p>
-                <div className='mask'>
-                  <img id='sunrise-icon' className='basis-full sunrise-sunset-icon' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunrise-2b.png' alt='The sun with an up-arrow above it' />
+          <div className='width text-white mb-75' id='sunrise-sunset-container'>
+            <div id='sunrise-sunset-info' className='basis-full'>
+              <div className='rise-set-container extra-info-sections shadow-2 basis-50 mr-1' id='sun-container'>
+                <p className='font-bold rise-set-header gray-border-bottom'>Sun</p>
+                <div className='flex'>
+                  <p className='basis-50 rise-set-subheader'>Sunrise</p>
+                  <p className='basis-50 rise-set-subheader'>Sunset</p>
                 </div>
-                <p className='letter-spacing-2' id='sunrise-time'>{sunriseTime}</p>
+                <div className='flex-wrap pt-half'>
+                  <div className='basis-50' id='sunrise-container'>
+                    {/* <p className='letter-spacing-2 font-bold'>Sunrise</p> */}
+                    <div className='mask'>
+                      <img id='sunrise-icon' className='basis-full sunrise-sunset-icon' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunrise-2b.png' alt='The sun with an up-arrow above it' />
+                    </div>
+                    <p className='' id='sunrise-time'>{sunriseTime}</p>
+                  </div>
+                  <div className='basis-50' id='sunset-container'>
+                    {/* <p className='letter-spacing-2 font-bold'>Sunset</p> */}
+                    <div className='mask'>
+                      <img id='sunset-icon' className='basis-full sunrise-sunset-icon' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunset-2b.png' alt='The sun with a down-arrow above it' />
+                    </div>
+                    <p className=''>{sunsetTime}</p>
+                  </div>
+                </div>
               </div>
-              <div className='basis-50' id='sunset-container'>
-                <p className='letter-spacing-2 font-bold'>Sunset</p>
-                <div className='mask'>
-                  <img id='sunset-icon' className='basis-full sunrise-sunset-icon' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/sunset-2b.png' alt='The sun with a down-arrow above it' />
+              <div className='rise-set-container extra-info-sections shadow-2 basis-50' id='moon-container'>
+                <p className='font-bold rise-set-header gray-border-bottom'>Moon</p>
+                <div className='flex'>
+                  <p className='basis-50 rise-set-subheader'>Moonrise</p>
+                  <p className='basis-50 rise-set-subheader'>Moonset</p>
                 </div>
-                <p className='letter-spacing-2'>{sunsetTime}</p>
+                <div className='flex-wrap pt-half'>
+                  <div className='basis-50' id='moonrise-container'>
+                    {/* <p className='letter-spacing-2 font-bold'>Moonrise</p> */}
+                    <div className='mask'>
+                      <img id='moonrise-icon' className='basis-full sunrise-sunset-icon' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/moonrise-1b.png' alt='The moon with an up-arrow above it' />
+                    </div>
+                    <p className='' id='moonrise-time'>{moonriseTime}</p>
+                  </div>
+                  <div className='basis-50' id='moonset-container'>
+                    {/* <p className='letter-spacing-2 font-bold'>Moonset</p> */}
+                    <div className='mask'>
+                      <img id='moonset-icon' className='basis-full sunrise-sunset-icon' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/moonset-1b.png' alt='The moon with an up-arrow above it' />
+                    </div>
+                    <p className='' id='moonset-time'>{moonsetTime}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div className='extra-info-sections text-white width shadow-2 text-white' id='extra-info-section' hidden>
-            <div className='flex basis-full align-items-center' id='extra-info-container'>
-              <div id="humidity-container" className='shadow basis-33'>
-                <p id='humidity-header' className='extra-info-header letter-spacing-2'>Humidity</p>
+          <div className='flex extra-info-sections shadow-2 text-white width mb-75' id='extra-info-section'>
+            {/* <div className='flex basis-full align-items-center' id='extra-info-container'> */}
+              <div id="humidity-container" className='flex-wrap basis-33'>
+                <p id='humidity-header' className='extra-info-header basis-full'>Humidity</p>
                 <FontAwesomeIcon className='extra-info-icons' id='droplet' icon={faDroplet} />
-                <p className='extra-info-number' id="humidity-number">{humidity}%</p>
+                <p className='extra-info-number basis-full' id="humidity-number">{humidity}%</p>
               </div>
-              <div id="visibility-container" className='shadow basis-33'>
-                <p id='visibility-header' className='extra-info-header letter-spacing-2'>Visibility</p>
+              <div id="visibility-container" className='flex-wrap basis-33'>
+                <p id='visibility-header' className='extra-info-header basis-full'>Visibility</p>
                 <img className='extra-info-icons' id="visibility-icon" src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/eye-solid-edited-1b.png' alt='An eye with a brown iris' />
-                <p className='extra-info-number' id="visibility-number">{visibility}</p>
+                <p className='extra-info-number basis-full' id="visibility-number">{visibility}</p>
               </div>
-              <div id="pressure-container" className='shadow basis-33'>
-                <p id='pressure-header' className='extra-info-header letter-spacing-2'>Pressure</p>
+              <div id="pressure-container" className='flex-wrap basis-33'>
+                <p id='pressure-header' className='extra-info-header basis-full'>Pressure</p>
                 <FontAwesomeIcon className='extra-info-icons' icon={faDownLeftAndUpRightToCenter} />
-                <p className='extra-info-number' id="pressure-number">{pressure}</p>
+                <p className='extra-info-number basis-full' id="pressure-number">{pressure}</p>
               </div>
-            </div>
+            {/* </div> */}
           </div>
-          <div className='width extra-info-sections text-white shadow-2' id='uv-air-container'>
-            <div className='basis-50' id='uv-container'>
-              <p className='letter-spacing-2 font-bold'>UV Index</p>
-              <div className='' >
-                <div id='uv-number-container'>
-                  <p className='uv-air-number' id="uv-number">{uvIndex}</p>
+          <div className='width flex align-items-center text-white' id='uv-air-container'>
+              <div className='flex-wrap basis-25 extra-info-sections shadow-2  mr-1' id='uv-container'>
+                <p className='font-bold basis-full'>UV Index</p>
+                <div className='' >
+                  <div id='uv-number-container'>
+                    <p className='uv-air-number' id="uv-number">{uvIndex}</p>
+                  </div>
                 </div>
+                <p className='extra-info-number basis-full'>{uvIndexDescription}</p>
               </div>
-              <p className='extra-info-number'>{uvIndexDescription}</p>
-            </div>
-            <div className='basis-50' id='air-quality-container'>
-              <p className='letter-spacing-2 font-bold'>Air Quality</p>
-              <div>
-                <div id='air-quality-number-container'>
-                  <p className='uv-air-number' id="air-quality-number">{airQuality}</p>
+              <div id="coverage-container" className='flex-wrap shadow basis-25 extra-info-sections shadow-2  mr-1'>
+                <p id='coverage-header' className='extra-info-header'>Coverage</p>
+                <div id='coverage-icon-container' className='basis-full'>
+                  <img id='coverage-icon' className='basis-full extra-info-icons' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-cloudy-gray.png' alt='Three gray clouds of various sizes grouped together' />
                 </div>
+                <p className='extra-info-number' id="coverage-number">{cloudCoverage}%</p>
               </div>
-              <p className='extra-info-number'>{airQualityDescription}</p>
-            </div>
+              <div className='flex-wrap basis-25 extra-info-sections shadow-2 mr-1' id='air-quality-container'>
+                <p className='font-bold basis-full'>AQ Index</p>
+                <div>
+                  <div id='air-quality-number-container'>
+                    <p className='uv-air-number' id="air-quality-number">{airQuality}</p>
+                  </div>
+                </div>
+                <p className='extra-info-number basis-full'>{airQualityDescription}</p>
+              </div>
+              <div id="precipitation-container" className='flex-wrap shadow basis-25 extra-info-sections shadow-2'>
+                <p id='precipitation-header' className='extra-info-header'>Rainfall</p>
+                <div id='precipitation-icon-container' className='basis-full'>
+                  <img id='precipitation-icon' className='basis-full extra-info-icons' src='https://localweatherapp-images.s3.us-west-1.amazonaws.com/adobestock-rain-3b.png' alt='A cloud with rain drops coming out of it' />
+                </div>
+                <p className='extra-info-number' id="precipitation-number">{precip}</p>
+              </div>              
           </div>
         </div>
         <div id='brand-text-container' className='flex gray-text'>
